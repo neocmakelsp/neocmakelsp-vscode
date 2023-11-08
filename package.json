@@ -1,0 +1,51 @@
+{
+  "name": "neocmake-lsp-vscode",
+  "description": "vscode extension for neocmake-lsp",
+  "author": "Microsoft Corporation",
+  "license": "MIT",
+  "version": "0.0.1",
+  "publisher": "Decodetalkers",
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Formatters"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/vscode-extension-samples"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^8.1.0"
+  },
+  "activationEvents": [
+    "onLanguage:cmake"
+  ],
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.80.0",
+    "@typescript-eslint/eslint-plugin": "^6.2.1",
+    "@typescript-eslint/parser": "^6.2.1",
+    "@vscode/test-electron": "^2.3.4",
+    "@vscode/vsce": "^2.20.1",
+    "esbuild": "^0.18.17",
+    "eslint": "^8.46.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.0.1",
+    "typescript": "^5.1.6"
+  },
+  "main": "./out/extension.js",
+  "scripts": {
+    "esbuild": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+    "build": "vsce package",
+    "vscode:prepublish": "npm run check-ts && npm run esbuild -- --minify --keep-names",
+    "compile": "npm run esbuild -- --sourcemap",
+    "check-ts": "tsc -noEmit -p ./",
+    "test-compile": "tsc -p ./ && npm run compile",
+    "test": "npm run test-compile && node ./out/test/index.js"
+  }
+}
