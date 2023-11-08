@@ -42,6 +42,7 @@
   "scripts": {
     "esbuild": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
     "build": "vsce package",
+    "publish": "vsce publish",
     "vscode:prepublish": "npm run check-ts && npm run esbuild -- --minify --keep-names",
     "compile": "npm run esbuild -- --sourcemap",
     "check-ts": "tsc -noEmit -p ./",
