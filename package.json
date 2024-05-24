@@ -3,7 +3,7 @@
   "description": "vscode extension for neocmake-lsp",
   "author": "Microsoft Corporation",
   "license": "MIT",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "Decodetalkers",
   "categories": [
     "Programming Languages",
@@ -16,6 +16,43 @@
   },
   "engines": {
     "vscode": "^1.80.0"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "cmake",
+        "extensions": [
+          ".cmake"
+        ],
+        "filenames": [
+          "CMakelists.txt"
+        ],
+        "aliases": [
+          "CMake"
+        ]
+      },
+      {
+        "id": "cmake-cache",
+        "filenames": [
+          "CMakeCache.txt"
+        ],
+        "aliases": [
+          "CMake Cache"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cmake",
+        "scopeName": "source.cmake",
+        "path": "./syntaxes/CMake.tmLanguage"
+      },
+      {
+        "language": "cmake-cache",
+        "scopeName": "source.cmakecache",
+        "path": "./syntaxes/CMakeCache.tmLanguage"
+      }
+    ]
   },
   "dependencies": {
     "vscode-languageclient": "^8.1.0",
