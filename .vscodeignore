@@ -9,4 +9,4 @@ src/**
 **/*.map
 **/*.ts
 node_modules/**
-./neocmake-lsp-vscode-0.0.1.vsix
+./neocmake-lsp-vscode-*.vsix
