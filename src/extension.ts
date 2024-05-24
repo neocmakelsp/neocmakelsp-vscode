@@ -5,8 +5,6 @@
 
 import { workspace, ExtensionContext } from 'vscode';
 
-import * as vscode from 'vscode';
-
 import {
   LanguageClient,
   LanguageClientOptions,
@@ -19,14 +17,11 @@ let client: LanguageClient;
 export async function activate(context: ExtensionContext) {
   const exPath = context.extensionPath;
 
-  vscode.window.showInformationMessage(`path : ${exPath}`)
-
   let path = await installLatestNeocmakeLsp(exPath);
 
   let realPath = "neocmakelsp";
   if (path !== undefined) {
     realPath = path;
-    vscode.window.showInformationMessage(realPath)
   }
   // The server is implemented in node
   // If the extension is launched in debug mode then the debug server options are used

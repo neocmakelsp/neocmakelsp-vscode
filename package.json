@@ -3,7 +3,7 @@
   "description": "vscode extension for neocmake-lsp",
   "author": "Microsoft Corporation",
   "license": "MIT",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "Decodetalkers",
   "categories": [
     "Programming Languages",
