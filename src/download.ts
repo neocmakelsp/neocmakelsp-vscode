@@ -74,7 +74,7 @@ namespace Install {
       throw new Error(`failed to download ${url}`);
     }
     const out = fs.createWriteStream(dest);
-    await promisify(stream.pipeline)(response.body!, out).catch(e => {
+    await promisify(stream.pipeline)(response.body, out).catch(e => {
       fs.unlink(dest, (_) => null);
       throw e;
     });
