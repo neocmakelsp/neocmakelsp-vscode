@@ -27,7 +27,6 @@ export namespace Github {
 
   export async function lastestRelease(timeoutController: AbortController) {
     const timeout = setTimeout(() => { timeoutController.abort(); }, 5000)
-
     try {
       const response = await fetch(githubReleaseURL, { signal: timeoutController.signal })
       if (!response.ok) {
@@ -35,6 +34,8 @@ export namespace Github {
         throw new Error(`Can't fetch release: ${response.statusText}`)
       }
       return await response.json() as Release;
+    } catch (e) {
+      throw e;
     } finally {
       clearTimeout(timeout)
     }
@@ -129,12 +130,16 @@ function getGithubAssert(asserts: Github.Asset[]) {
 
 export async function installLatestNeocmakeLsp(path: string) {
   let timeoutController = new AbortController();
-  const latestRe = await Github.lastestRelease(timeoutController);
-  let assert = getGithubAssert(latestRe.assets);
-  if (assert === undefined) {
-    console.log("Your platform is not supported");
-    return;
+  try {
+    const latestRe = await Github.lastestRelease(timeoutController);
+    let assert = getGithubAssert(latestRe.assets);
+    if (assert === undefined) {
+      console.log("Your platform is not supported");
+      return undefined;
+    }
+    return await Install.install(assert, timeoutController, path);
+  } catch (e) {
+    console.log(`Error: ${e}`);
+    return undefined;
   }
-  return await Install.install(assert, timeoutController, path);
-
 }
