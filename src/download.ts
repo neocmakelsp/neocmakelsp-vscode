@@ -2,6 +2,7 @@ import which from 'which'
 
 import * as os from 'os';
 
+import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as stream from 'stream';
 import * as child_process from 'child_process'
@@ -89,6 +90,7 @@ namespace Install {
         return exePath;
       }
     }
+    vscode.window.showInformationMessage("find new version of neocmakelsp, start downloading");
     const neocmakelspPath = path.join(storagePath, assert.name);
     const neocmakelspFinallyPath = path.join(storagePath, executableName());
     try {
@@ -96,6 +98,8 @@ namespace Install {
     } catch (_) {
       return undefined
     }
+
+    vscode.window.showInformationMessage("neocmakelsp is downloaded");
 
     await fs.promises.chmod(neocmakelspPath, 0o755);
     await fs.promises.rename(neocmakelspPath, neocmakelspFinallyPath)
