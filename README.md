@@ -1,4 +1,4 @@
-# neocmakslsp vscode plugin
+# neocmakelsp vscode plugin
 
 This plugin is for [neocmakelsp](https://github.com/Decodetalkers/neocmakelsp) on vscode, it providing:
 
@@ -12,12 +12,13 @@ This plugin is for [neocmakelsp](https://github.com/Decodetalkers/neocmakelsp) o
 
 ## Settings
 
-neocmakslsp can use tcp way to start, to set is like
+neocmakslsp can use tcp way to start, and it can be set to use local target, not download asserts from github, you can set them like
 
 ```json
 {
-  "neocmakslsp": {
-    "tcp": true
+  "neocmakelsp": {
+    "tcp": true,
+    "localtarget": true
   }
 }
 ```
