@@ -4,7 +4,6 @@
  * ------------------------------------------------------------------------------------------ */
 
 import { workspace, ExtensionContext } from 'vscode';
-import * as vscode from 'vscode'
 import {
   LanguageClient,
   LanguageClientOptions,
@@ -19,7 +18,6 @@ export async function activate(context: ExtensionContext) {
   let allAsJson = JSON.parse(JSON.stringify(config));
 
   let neocmakelspExcutable = undefined;
-  vscode.window.showInformationMessage(`data: ${JSON.stringify(config)}`)
 
   if (allAsJson.tcp === true) {
     neocmakelspExcutable = {
