@@ -25,13 +25,14 @@ export async function activate(context: ExtensionContext) {
       args: ['localhost', '9257']
     }
   } else {
-    const exPath = context.extensionPath;
-
-    let path = await installLatestNeocmakeLsp(exPath);
-
     let realPath = "neocmakelsp";
-    if (path !== undefined) {
-      realPath = path;
+    if (allAsJson.localtarget !== true) {
+      const exPath = context.extensionPath;
+
+      let path = await installLatestNeocmakeLsp(exPath);
+      if (path !== undefined) {
+        realPath = path;
+      }
     }
     // The server is implemented in node
     // If the extension is launched in debug mode then the debug server options are used

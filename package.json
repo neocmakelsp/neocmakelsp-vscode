@@ -27,6 +27,11 @@
           "type": "boolean",
           "default": false,
           "description": "use tcp to start neocmakelsp"
+        },
+        "neocmakelsp.localtarget": {
+          "type": "boolean",
+          "default": false,
+          "description": "use neocmakelsp from local path"
         }
       }
     },
