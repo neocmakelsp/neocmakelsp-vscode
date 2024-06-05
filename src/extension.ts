@@ -4,7 +4,7 @@
  * ------------------------------------------------------------------------------------------ */
 
 import { workspace, ExtensionContext } from 'vscode';
-
+import * as vscode from 'vscode'
 import {
   LanguageClient,
   LanguageClientOptions,
@@ -15,21 +15,34 @@ import { installLatestNeocmakeLsp } from './download';
 let client: LanguageClient;
 
 export async function activate(context: ExtensionContext) {
-  const exPath = context.extensionPath;
+  let config = workspace.getConfiguration("neocmakelsp");
+  let allAsJson = JSON.parse(JSON.stringify(config));
 
-  let path = await installLatestNeocmakeLsp(exPath);
+  let neocmakelspExcutable = undefined;
+  vscode.window.showInformationMessage(`data: ${JSON.stringify(config)}`)
 
-  let realPath = "neocmakelsp";
-  if (path !== undefined) {
-    realPath = path;
+  if (allAsJson.tcp === true) {
+    neocmakelspExcutable = {
+      command: "nc",
+      args: ['localhost', '9257']
+    }
+  } else {
+    const exPath = context.extensionPath;
+
+    let path = await installLatestNeocmakeLsp(exPath);
+
+    let realPath = "neocmakelsp";
+    if (path !== undefined) {
+      realPath = path;
+    }
+    // The server is implemented in node
+    // If the extension is launched in debug mode then the debug server options are used
+    // Otherwise the run options are used
+    neocmakelspExcutable = {
+      command: realPath,
+      args: ['--stdio'],
+    };
   }
-  // The server is implemented in node
-  // If the extension is launched in debug mode then the debug server options are used
-  // Otherwise the run options are used
-  const neocmakelspExcutable = {
-    command: realPath,
-    args: ['--stdio'],
-  };
   const serverOptions: ServerOptions = {
     run: neocmakelspExcutable,
     debug: neocmakelspExcutable

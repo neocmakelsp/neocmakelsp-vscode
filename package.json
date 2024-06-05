@@ -18,6 +18,17 @@
     "vscode": "^1.80.0"
   },
   "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "neocmakelsp",
+      "properties": {
+        "neocmakelsp.tcp": {
+          "type": "boolean",
+          "default": false,
+          "description": "use tcp to start neocmakelsp"
+        }
+      }
+    },
     "languages": [
       {
         "id": "cmake",
