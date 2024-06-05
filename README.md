@@ -1,6 +1,6 @@
 # neocmakslsp vscode plugin
 
-This plugin is for [neocmakslsp](https://github.com/Decodetalkers/neocmakelsp) on vscode, it providing:
+This plugin is for [neocmakelsp](https://github.com/Decodetalkers/neocmakelsp) on vscode, it providing:
 
  - code completion
  - compile errors and warnings

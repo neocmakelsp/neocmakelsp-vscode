@@ -5,6 +5,7 @@
   "license": "MIT",
   "version": "0.0.7",
   "publisher": "Decodetalkers",
+  "icon": "icon.png",
   "categories": [
     "Programming Languages",
     "Linters",
