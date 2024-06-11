@@ -112,11 +112,16 @@ namespace Install {
 }
 
 function targetName() {
+  let arch = os.arch()
   switch (os.platform()) {
     case "win32":
       return "neocmakelsp-x86_64-pc-windows-msvc.exe"
     case "darwin":
-      return "neocmakelsp-aarch64-apple-darwin";
+      if (arch == "x64") {
+        return "neocmakelsp-x86_64-apple-darwin";
+      } else {
+        return "neocmakelsp-aarch64-apple-darwin";
+      }
     case "linux":
       return "neocmakelsp-x86_64-unknown-linux-gnu"
     default:
