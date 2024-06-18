@@ -1,3 +1,5 @@
+# move to [neocmakelsp](https://github.com/Decodetalkers/neocmakelsp)
+
 # neocmakelsp vscode plugin
 
 This plugin is for [neocmakelsp](https://github.com/Decodetalkers/neocmakelsp) on vscode, it providing:
