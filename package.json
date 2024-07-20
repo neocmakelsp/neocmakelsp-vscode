@@ -3,7 +3,7 @@
   "description": "vscode extension for neocmakelsp",
   "author": "Decodetalkers",
   "license": "MIT",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "publisher": "Decodetalkers",
   "icon": "icon.png",
   "categories": [
@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Decodetalkers/neocmakelsp"
+    "url": "https://github.com/Decodetalkers/neocmakelsp-vscode"
   },
   "engines": {
     "vscode": "^1.91.0"
