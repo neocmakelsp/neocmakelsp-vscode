@@ -1,5 +1,5 @@
 import which from 'which'
-import * as child_process from 'child_process'
+import * as child_process from 'node:child_process'
 
 const githubReleaseURL = 'https://api.github.com/repos/Decodetalkers/neocmakelsp/releases/latest';
 

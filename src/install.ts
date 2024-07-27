@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as stream from 'stream';
-import * as os from 'os';
+import * as fs from 'node:fs';
+import * as stream from 'node:stream';
+import * as os from 'node:os';
 
 import path from "path";
 import { promisify } from "util";

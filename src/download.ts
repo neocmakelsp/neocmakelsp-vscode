@@ -1,4 +1,4 @@
-import * as os from 'os';
+import * as os from 'node:os';
 
 import * as Github from "./github";
 import * as Install from "./install";
