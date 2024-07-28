@@ -20,3 +20,6 @@ jobs:
       - run: npm install
       - run: npx ovsx publish -p ${{ secrets.OVSX_TOKEN }}
       - run: npx vsce publish -p ${{ secrets.VSCE_TOKEN }}
+      - uses: softprops/action-gh-release@v2
+        with:
+          draft: true
