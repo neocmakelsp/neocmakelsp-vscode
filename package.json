@@ -80,7 +80,7 @@
     "onLanguage:cmake"
   ],
   "devDependencies": {
-    "@types/node": "20.x",
+    "@types/node": "22.x",
     "@types/vscode": "^1.91.0",
     "@types/which": "^3.0.4",
     "@vscode/vsce": "^2.31.1",
