@@ -29,7 +29,7 @@ export async function activate(context: ExtensionContext) {
   }
   if (allAsJson.tcp === true) {
     neocmakelspExecutable = {
-      command: "nc",
+      command: ncCommand,
       args: ['localhost', '9257']
     }
   } else {
