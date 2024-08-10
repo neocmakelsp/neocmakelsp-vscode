@@ -11,6 +11,10 @@ import {
 } from 'vscode-languageclient/node';
 import { installLatestNeocmakeLsp } from './download';
 
+import * as os from 'node:os'
+
+const arch = os.arch();
+
 let client: LanguageClient;
 
 export async function activate(context: ExtensionContext) {
@@ -19,6 +23,10 @@ export async function activate(context: ExtensionContext) {
 
   let neocmakelspExecutable = undefined;
 
+  let ncCommand = "nc";
+  if (arch == "win32") {
+    ncCommand = "ncat";
+  }
   if (allAsJson.tcp === true) {
     neocmakelspExecutable = {
       command: "nc",
