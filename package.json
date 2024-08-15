@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Decodetalkers/neocmakelsp-vscode"
+    "url": "https://github.com/neocmakelsp/neocmakelsp-vscode"
   },
   "engines": {
     "vscode": "^1.92.0"
