@@ -83,7 +83,7 @@
     "@types/node": "22.x",
     "@types/vscode": "^1.92.0",
     "@types/which": "^3.0.4",
-    "@vscode/vsce": "^2.31.1",
+    "@vscode/vsce": "^3.0.0",
     "esbuild": "^0.23.0",
     "ovsx": "^0.9.1",
     "typescript": "^5.5.3"
