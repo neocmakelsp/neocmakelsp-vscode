@@ -43,6 +43,7 @@ jobs:
       - name: Setup yarn
         run: npm install -g yarn
       - run: yarn install
+      - run: yarn build
       - run: yarn ovsx publish -p ${{ secrets.OVSX_TOKEN }}
       - run: yarn vsce publish -p ${{ secrets.VSCE_TOKEN }}
       - uses: softprops/action-gh-release@v2

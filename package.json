@@ -102,6 +102,7 @@
     "build": "vsce package",
     "publish": "vsce publish",
     "publish-openvsx": "ovsx publish",
+    "vscode:prepublish": "npm run check-ts && npm run esbuild -- --minify --keep-names",
     "compile": "npm run esbuild -- --sourcemap",
     "check-ts": "tsc -noEmit -p ./",
     "test": "jest"
