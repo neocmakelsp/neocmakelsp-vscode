@@ -22,7 +22,8 @@ jobs:
         with:
           node-version: "20.x"
       - run: npm install
-      - run: npm test
+      - run: npm install -g yarn
+      - run: yarn test
 
   release:
     permissions:
@@ -39,9 +40,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20.x"
-      - run: npm install
-      - run: npx ovsx publish -p ${{ secrets.OVSX_TOKEN }}
-      - run: npx vsce publish -p ${{ secrets.VSCE_TOKEN }}
+      - name: Setup yarn
+        run: npm install -g yarn
+      - run: yarn install
+      - run: yarn ovsx publish -p ${{ secrets.OVSX_TOKEN }}
+      - run: yarn vsce publish -p ${{ secrets.VSCE_TOKEN }}
       - uses: softprops/action-gh-release@v2
         with:
           draft: true
