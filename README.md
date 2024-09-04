@@ -18,7 +18,8 @@ neocmakelsp can use tcp way to start, and it can be set to use local target, not
 {
   "neocmakelsp": {
     "tcp": true,
-    "localtarget": true
+    "localtarget": true,
+    "path": "${env:HOME}/.cargo/bin/neocmakelsp"
   }
 }
 ```
