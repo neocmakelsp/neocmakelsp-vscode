@@ -99,6 +99,7 @@
   },
   "main": "./out/extension.js",
   "scripts": {
+    "esbuild": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
     "build": "vsce package",
     "publish": "vsce publish",
     "publish-openvsx": "ovsx publish",
