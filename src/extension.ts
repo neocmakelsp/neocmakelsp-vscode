@@ -12,29 +12,31 @@ import {
 import { installLatestNeocmakeLsp } from './download';
 
 import * as os from 'node:os'
+import { get } from './config';
 
 const arch = os.arch();
 
 let client: LanguageClient;
 
 export async function activate(context: ExtensionContext) {
-  const config = workspace.getConfiguration("neocmakelsp");
-  const allAsJson = JSON.parse(JSON.stringify(config));
-
   let neocmakelspExecutable = undefined;
+
+  const tcp = get<boolean>("tcp");
+
+  const localtarget = get<boolean>("localtarget");
 
   let ncCommand = "nc";
   if (arch == "win32") {
     ncCommand = "ncat";
   }
-  if (allAsJson.tcp === true) {
+  if (tcp === true) {
     neocmakelspExecutable = {
       command: ncCommand,
       args: ['localhost', '9257']
     }
   } else {
-    let realPath = "neocmakelsp";
-    if (allAsJson.localtarget !== true) {
+    let realPath = get<string>("path");
+    if (localtarget !== true) {
       const exPath = context.extensionPath;
 
       let path = await installLatestNeocmakeLsp(exPath);
