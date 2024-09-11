@@ -89,7 +89,7 @@
     "@types/node": "22.x",
     "@types/vscode": "^1.92.0",
     "@types/which": "^3.0.4",
-    "@vscode/vsce": "^3.0.0",
+    "@vscode/vsce": "^3.1.0",
     "assert": "^2.1.0",
     "esbuild": "^0.23.0",
     "jest": "^29.7.0",
