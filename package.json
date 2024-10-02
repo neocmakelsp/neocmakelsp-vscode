@@ -79,7 +79,7 @@
   "dependencies": {
     "abort-controller": "^3.0.0",
     "vscode-languageclient": "^9.0.1",
-    "which": "^4.0.0"
+    "which": "^5.0.0"
   },
   "activationEvents": [
     "onLanguage:cmake"
