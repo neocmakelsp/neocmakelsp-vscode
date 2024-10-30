@@ -16,7 +16,7 @@
     "url": "https://github.com/neocmakelsp/neocmakelsp-vscode"
   },
   "engines": {
-    "vscode": "^1.94.0"
+    "vscode": "^1.95.0"
   },
   "contributes": {
     "configuration": {
