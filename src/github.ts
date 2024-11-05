@@ -1,5 +1,6 @@
 import which from 'which'
 import * as child_process from 'node:child_process'
+import { version_is_latest } from './util';
 
 const githubReleaseURL = 'https://api.github.com/repos/Decodetalkers/neocmakelsp/releases/latest';
 
@@ -14,7 +15,8 @@ export interface Asset {
 export async function isLatestRelease(path: string, abort: AbortController) {
   const latestversion = await latestRelease(abort);
   const version = await getNeocmakeVersion(path);
-  return latestversion.tag_name.substring(1) === version
+  const tag_version = latestversion.tag_name.substring(1)
+  return version_is_latest(tag_version, version)
 }
 
 export async function latestRelease(timeoutController: AbortController) {

@@ -29,3 +29,16 @@ function replacement(name: string): string | undefined {
   }
   return undefined;
 }
+
+export function version_is_latest(tag_version: string, local_version: string): boolean {
+  const tag_v_list = tag_version.split('.');
+  const latest_v_list = local_version.split('.');
+
+  const max_count = 3;
+  for (let index = 0; index < max_count; index++) {
+    if (tag_v_list[index] > latest_v_list[index]) {
+      return false
+    }
+  }
+  return true
+}
