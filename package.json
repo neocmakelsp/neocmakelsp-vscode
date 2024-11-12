@@ -107,5 +107,6 @@
     "compile": "npm run esbuild -- --sourcemap",
     "check-ts": "tsc -noEmit -p ./",
     "test": "jest"
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }
