@@ -82,7 +82,7 @@ export class CMakeDebugAdapterDescriptorFactory implements vscode.DebugAdapterDe
     session.configuration.fromCommand ? DebugOrigin.originatedFromCommand : DebugOrigin.originatedFromLaunchConfiguration;
     const script = session.configuration.scriptPath;
     if (script != undefined && !fs.existsSync(script)) {
-      throw new Error(`cmake.debug.scriptPath.does.not.exist, The script path, \"${script}\", could not be found.1`);
+      throw new Error(`cmake.debug.scriptPath.does.not.exist, The script path, \"${script}\", could not be found`);
     }
     const args: string[] = session.configuration.scriptArgs ?? [];
     const env = new Map<string, string>(session.configuration.scriptEnv?.map((e: { name: string; value: string }) => [e.name, e.value])) ?? new Map();
