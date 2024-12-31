@@ -63,6 +63,63 @@
         ]
       }
     ],
+    "breakpoints": [
+      {
+        "language": "cmake"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "cmake",
+        "label": "neocmakelsp debugger",
+        "configurationAttributes": {
+          "launch": {
+            "properties": {
+              "pipeName": {
+                "type": "string",
+                "description": "Name of the named piped that the debugger will communicate with CMake over"
+              },
+              "scriptPath": {
+                "type": "string",
+                "description": "the started script",
+                "default": "script.cmake"
+              },
+              "cmakeDebugType": {
+                "type": "string",
+                "enum": [
+                  "configure",
+                  "script"
+                ],
+                "description": "cmake debug type",
+                "default": "configure"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "neocmakelsp.outline.runScriptDebugger"
+        },
+        {
+          "command": "neocmakelsp.outline.runConfigureDebugger"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "neocmakelsp.runScriptDebugger",
+        "title": "debug current cmake script",
+        "categories": "CMake"
+      },
+      {
+        "command": "neocmakelsp.runConfigureDebugger",
+        "title": "debug current cmake workspace",
+        "categories": "CMake"
+      }
+    ],
     "grammars": [
       {
         "language": "cmake",
@@ -78,6 +135,7 @@
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
+    "uuid": "^11.0.3",
     "vscode-languageclient": "^9.0.1",
     "which": "^5.0.0"
   },

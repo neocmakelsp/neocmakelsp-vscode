@@ -6,14 +6,50 @@ import {
 } from 'vscode-languageclient/node';
 import { installLatestNeocmakeLsp } from './download';
 
+import { CMakeDebugAdapterDescriptorFactory, getDebuggerPipeName } from "./debug"
+
+import * as vscode from "vscode"
 import * as os from 'node:os'
 import { get } from './config';
+import { SourceFileNode } from './outlines';
 
 const arch = os.arch();
 
 let client: LanguageClient;
 
+function setup(context: vscode.ExtensionContext) {
+  context.subscriptions.push(
+    vscode.debug.registerDebugAdapterDescriptorFactory("cmake", new CMakeDebugAdapterDescriptorFactory)
+  );
+  vscode.commands.registerCommand('neocmakelsp.runScriptDebugger', async () => {
+    return vscode.debug.startDebugging(undefined, {
+      name: "CMake debugger",
+      request: "launch",
+      type: "cmake",
+      cmakeDebugType: "script",
+      scriptPath: vscode.window.activeTextEditor.document.uri.fsPath,
+      pipeName: getDebuggerPipeName()
+    });
+  })
+  vscode.commands.registerCommand('neocmakelsp.outline.runScriptDebugger', async (what: SourceFileNode) => {
+    return vscode.commands.executeCommand("neocmakelsp.runScriptDebugger", what.sourcePath)
+  }),
+  vscode.commands.registerCommand('neocmakelsp.runConfigureDebugger', async () => {
+    return vscode.debug.startDebugging(undefined, {
+      name: "CMake debugger",
+      request: "launch",
+      type: "cmake",
+      pipeName: getDebuggerPipeName(),
+      cmakeDebugType: "configure"
+    });
+  })
+  vscode.commands.registerCommand('neocmakelsp.outline.runConfigureDebugger', async (what: SourceFileNode) => {
+    return vscode.commands.executeCommand("neocmakelsp.runConfigureDebugger", what.sourcePath)
+  })
+}
+
 export async function activate(context: ExtensionContext) {
+  setup(context);
   let neocmakelspExecutable = undefined;
 
   const tcp = get<boolean>("tcp");
