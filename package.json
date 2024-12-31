@@ -9,7 +9,8 @@
   "categories": [
     "Programming Languages",
     "Linters",
-    "Formatters"
+    "Formatters",
+    "Debuggers"
   ],
   "repository": {
     "type": "git",
@@ -71,7 +72,10 @@
     "debuggers": [
       {
         "type": "cmake",
-        "label": "neocmakelsp debugger",
+        "label": "CMake",
+        "languages": [
+          "cmake"
+        ],
         "configurationAttributes": {
           "launch": {
             "properties": {
@@ -95,7 +99,38 @@
               }
             }
           }
-        }
+        },
+        "initialConfigurations": [
+          {
+            "type": "cmake",
+            "request": "launch",
+            "name": "configure",
+            "cmakeDebugType": "configure"
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "cmake project launch",
+            "description": "debug when configure the project",
+            "body": {
+              "type": "cmake",
+              "request": "launch",
+              "name": "project debug",
+              "cmakeDebugType": "configure"
+            }
+          },
+          {
+            "label": "cmake script debug launch",
+            "description": "debug a single cmake file",
+            "body": {
+              "type": "cmake",
+              "request": "launch",
+              "name": "script debug",
+              "cmakeDebugType": "script",
+              "scriptPath": "script.cmake"
+            }
+          }
+        ]
       }
     ],
     "menus": {

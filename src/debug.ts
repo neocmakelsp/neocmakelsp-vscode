@@ -33,8 +33,7 @@ export function getDebuggerPipeName(): string {
 function initDebugger(debugType: CMakeDebugType, scriptPath?: string): string[] {
   switch (debugType) {
     case "script":
-      return ["-p", scriptPath!]
-
+      return ["-P", scriptPath!]
     default:
       return ["-B", "build"]
   }
