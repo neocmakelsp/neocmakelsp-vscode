@@ -83,6 +83,15 @@
                 "type": "string",
                 "description": "the started script",
                 "default": "script.cmake"
+              },
+              "cmakeDebugType": {
+                "type": "string",
+                "enum": [
+                  "configure",
+                  "script"
+                ],
+                "description": "cmake debug type",
+                "default": "configure"
               }
             }
           }
@@ -92,14 +101,22 @@
     "menus": {
       "commandPalette": [
         {
-          "command": "neocmakelsp.outline.runDebugger"
+          "command": "neocmakelsp.outline.runScriptDebugger"
+        },
+        {
+          "command": "neocmakelsp.outline.runConfigureDebugger"
         }
       ]
     },
     "commands": [
       {
-        "command": "neocmakelsp.runDebugger",
-        "title": "run cmake debugger",
+        "command": "neocmakelsp.runScriptDebugger",
+        "title": "debug current cmake script",
+        "categories": "CMake"
+      },
+      {
+        "command": "neocmakelsp.runConfigureDebugger",
+        "title": "debug current cmake workspace",
         "categories": "CMake"
       }
     ],

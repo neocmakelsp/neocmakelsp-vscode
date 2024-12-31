@@ -21,19 +21,30 @@ function setup(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.debug.registerDebugAdapterDescriptorFactory("cmake", new CMakeDebugAdapterDescriptorFactory)
   );
-  vscode.commands.registerCommand('neocmakelsp.runDebugger', async (uri: vscode.Uri) => {
-    vscode.window.showInformationMessage(`hey`);
-    vscode.window.showInformationMessage(`${vscode.window.activeTextEditor.document.uri}`);
+  vscode.commands.registerCommand('neocmakelsp.runScriptDebugger', async () => {
     return vscode.debug.startDebugging(undefined, {
       name: "CMake debugger",
       request: "launch",
       type: "cmake",
+      cmakeDebugType: "script",
       scriptPath: vscode.window.activeTextEditor.document.uri.fsPath,
       pipeName: getDebuggerPipeName()
     });
   })
-  vscode.commands.registerCommand('neocmakelsp.outline.runDebugger', async (what: SourceFileNode) => {
-    return vscode.commands.executeCommand("neocmakelsp.runDebugger", what.sourcePath)
+  vscode.commands.registerCommand('neocmakelsp.outline.runScriptDebugger', async (what: SourceFileNode) => {
+    return vscode.commands.executeCommand("neocmakelsp.runScriptDebugger", what.sourcePath)
+  }),
+  vscode.commands.registerCommand('neocmakelsp.runConfigureDebugger', async () => {
+    return vscode.debug.startDebugging(undefined, {
+      name: "CMake debugger",
+      request: "launch",
+      type: "cmake",
+      pipeName: getDebuggerPipeName(),
+      cmakeDebugType: "configure"
+    });
+  })
+  vscode.commands.registerCommand('neocmakelsp.outline.runConfigureDebugger', async (what: SourceFileNode) => {
+    return vscode.commands.executeCommand("neocmakelsp.runConfigureDebugger", what.sourcePath)
   })
 }
 
