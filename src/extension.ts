@@ -4,7 +4,7 @@ import {
   LanguageClientOptions,
   ServerOptions,
 } from 'vscode-languageclient/node';
-import { installLatestNeocmakeLsp } from './download';
+import { installLatestNeocmakeLsp } from './install';
 
 import { CMakeDebugAdapterDescriptorFactory, getDebuggerPipeName } from "./debug"
 

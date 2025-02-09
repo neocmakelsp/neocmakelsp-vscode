@@ -1,83 +1,62 @@
-import * as vscode from 'vscode';
-import * as fs from 'node:fs';
-import * as stream from 'node:stream';
 import * as os from 'node:os';
 
-import path from "path";
-import { promisify } from "util";
+import * as Github from "./github";
+import * as Download from "./download";
 
-import * as Github from "./github"
+import * as vscode from 'vscode';
 
-type DownloadProgress = vscode.Progress<{ message?: string, increment?: number }>;
+const ARM_64 = "arm64"
+const X_64 = "x64"
 
-async function download(progress: DownloadProgress,
-  token: vscode.CancellationToken,
-  url: string,
-  dest: string,
-  abort: AbortController) {
-  token.onCancellationRequested(() => abort.abort());
-  const response = await fetch(url, { signal: abort.signal });
-  if (!response.ok) {
-    throw new Error(`failed to download ${url}`);
-  }
+type TARGET_ASSERT = "neocmakelsp-x86_64-apple-darwin"
+  | "neocmakelsp-aarch64-apple-darwin"
+  | "neocmakelsp-x86_64-pc-windows-msvc.exe"
+  | "neocmakelsp-x86_64-unknown-linux-gnu"
+  | "neocmakelsp-aarch64-unknown-linux-gnu"
+  | undefined
 
-  const totalSize = parseInt(response.headers.get('content-length'), 10); // Get total size in bytes
-  if (!totalSize) {
-    vscode.window.showErrorMessage('No content-length header, cannot track progress');
-  }
-
-  let downloadedSize = 0;
-  // Create a transform stream to track progress
-  const progressStream = new stream.Transform({
-    transform(chunk, _, callback) {
-      downloadedSize += chunk.length;
-      if (totalSize) {
-        const percent = ((downloadedSize / totalSize) * 100).toFixed(2);
-        progress.report({ message: `${percent}%`, increment: (chunk.length / totalSize) * 100 });
+function targetName(): TARGET_ASSERT {
+  const arch = os.arch()
+  switch (os.platform()) {
+    case "win32":
+      return "neocmakelsp-x86_64-pc-windows-msvc.exe"
+    case "darwin":
+      if (arch == X_64) {
+        return "neocmakelsp-x86_64-apple-darwin";
       } else {
-        progress.report({ message: `neocmakelsp downloaded finished`, increment: 100 });
+        return "neocmakelsp-aarch64-apple-darwin";
       }
-      callback(null, chunk);
-    },
-  });
-  const out = fs.createWriteStream(dest);
-  await promisify(stream.pipeline)(response.body, progressStream, out).catch(e => {
-    fs.unlink(dest, (_) => null);
-    throw e;
-  });
+    case "linux":
+      if (arch == ARM_64) {
+        return "neocmakelsp-aarch64-unknown-linux-gnu"
+      } else if (arch == X_64) {
+        return "neocmakelsp-x86_64-unknown-linux-gnu"
+      }
+    default:
+      return undefined;
+  }
 }
 
-export async function install(assert: Github.Asset, abort: AbortController, storagePath: string): Promise<string | undefined> {
-  if (await promisify(fs.exists)(storagePath)) {
-    const neocmakeExecutableName = executableName();
-    const exePath = path.join(storagePath, neocmakeExecutableName);
-    if (await Github.isLatestRelease(exePath, abort)) {
-      return exePath;
-    }
+function getGithubAssert(asserts: Github.Asset[]) {
+  const target = targetName();
+  if (target === undefined) {
+    return undefined;
   }
-  const neocmakelspPath = path.join(storagePath, assert.name);
-  const neocmakelspFinallyPath = path.join(storagePath, executableName());
+  return asserts.find(assert => assert.name === target);
+}
+
+export async function installLatestNeocmakeLsp(path: string) {
+  const timeoutController = new AbortController();
   try {
-    await vscode.window.withProgress(
-      {
-        location: vscode.ProgressLocation.Notification,
-        title: "Downloading new neocmakelsp",
-        cancellable: true
-      },
-      async (progress, token) => {
-
-        await download(progress, token, assert.browser_download_url, neocmakelspPath, abort);
-      })
-
-  } catch (_) {
-    return undefined
+    const latestRe = await Github.latestRelease(timeoutController);
+    const assert = getGithubAssert(latestRe.assets);
+    if (assert === undefined) {
+      vscode.window.showErrorMessage("Your platform is not supported");
+      return undefined;
+    }
+    return await Download.install(assert, timeoutController, path);
+  } catch (e) {
+    vscode.window.showErrorMessage(`${e}`);
+    return undefined;
   }
-
-  await fs.promises.chmod(neocmakelspPath, 0o755);
-  await fs.promises.rename(neocmakelspPath, neocmakelspFinallyPath)
-  return neocmakelspFinallyPath
-}
-
-function executableName(): string {
-  return os.platform() == 'win32' ? 'neocmakelsp.exe' : 'neocmakelsp';
 }
