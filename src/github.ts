@@ -14,7 +14,11 @@ export interface Asset {
 
 export async function isLatestRelease(path: string, abort: AbortController) {
   const latestversion = await latestRelease(abort);
+
   const version = await getNeocmakeVersion(path);
+  if (!version) {
+    return false;
+  }
   const tag_version = latestversion.tag_name.substring(1)
   return version_is_latest(tag_version, version)
 }
@@ -48,6 +52,7 @@ export async function getNeocmakeVersion(path: string) {
     return undefined
   }
   const output = await run(path, ['--version']);
+
   const version = output.split(' ')[1].trimEnd()
   return version
 }

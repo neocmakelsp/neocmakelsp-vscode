@@ -3,6 +3,8 @@ import * as os from 'node:os';
 import * as Github from "./github";
 import * as Install from "./install";
 
+import * as vscode from 'vscode';
+
 const ARM_64 = "arm64"
 const X_64 = "x64"
 
@@ -49,12 +51,12 @@ export async function installLatestNeocmakeLsp(path: string) {
     const latestRe = await Github.latestRelease(timeoutController);
     const assert = getGithubAssert(latestRe.assets);
     if (assert === undefined) {
-      console.log("Your platform is not supported");
+      vscode.window.showErrorMessage("Your platform is not supported");
       return undefined;
     }
     return await Install.install(assert, timeoutController, path);
   } catch (e) {
-    console.log(`Error: ${e}`);
+    vscode.window.showErrorMessage(e);
     return undefined;
   }
 }
