@@ -191,7 +191,7 @@
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
-    "uuid": "^11.0.3",
+    "uuid": "^11.1.0",
     "vscode-languageclient": "^9.0.1",
     "which": "^5.0.0"
   },
