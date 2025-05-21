@@ -201,7 +201,7 @@
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "22.x",
-    "@types/vscode": "^1.99.1",
+    "@types/vscode": "^1.100.0",
     "@types/which": "^3.0.4",
     "@vscode/vsce": "^3.4.1",
     "assert": "^2.1.0",
