@@ -58,6 +58,7 @@ export async function activate(context: ExtensionContext) {
   const tcp = get<boolean>("tcp");
 
   const localtarget = get<boolean>("localtarget");
+  const lsp_snippets = get<boolean>("lsp_snippets");
 
   let ncCommand = "nc";
   if (arch == "win32") {
@@ -100,7 +101,8 @@ export async function activate(context: ExtensionContext) {
       fileEvents: workspace.createFileSystemWatcher('**/CMakeCache.txt')
     },
     initializationOptions: {
-      semantic_token: true
+      semantic_token: true,
+      use_snippets: lsp_snippets
     }
   };
 

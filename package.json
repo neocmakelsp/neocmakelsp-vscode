@@ -3,7 +3,7 @@
   "description": "vscode extension for neocmakelsp",
   "author": "Decodetalkers",
   "license": "MIT",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "publisher": "Decodetalkers",
   "icon": "icon.png",
   "categories": [
@@ -43,6 +43,11 @@
           "type": "boolean",
           "default": false,
           "description": "enable the debug feature"
+        },
+        "neocmakelsp.lsp_snippets": {
+          "type": "boolean",
+          "default": false,
+          "description": "enable the lsp snippets"
         }
       }
     },
