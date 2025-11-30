@@ -13,7 +13,7 @@ import * as os from 'node:os'
 import { get } from './config';
 import { SourceFileNode } from './outlines';
 
-const arch = os.arch();
+const platform = os.platform();
 
 let client: LanguageClient;
 
@@ -61,7 +61,7 @@ export async function activate(context: ExtensionContext) {
   const lsp_snippets = get<boolean>("lsp_snippets");
 
   let ncCommand = "nc";
-  if (arch == "win32") {
+  if (platform == "win32") {
     ncCommand = "ncat";
   }
   if (tcp === true) {
