@@ -11,6 +11,14 @@ export interface Release {
 export interface Asset {
   name: string, browser_download_url: string,
 }
+export type RUNTIME_NAME = "neocmakelsp"
+  | "neocmakelsp.exe"
+export type FILE_TYPE = "zip" | "tar";
+export type AssetInfo = {
+  asset: Asset,
+  runtime: RUNTIME_NAME,
+  type: FILE_TYPE
+}
 
 export async function isLatestRelease(path: string, abort: AbortController) {
   const latestversion = await latestRelease(abort);

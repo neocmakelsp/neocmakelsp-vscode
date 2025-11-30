@@ -8,41 +8,73 @@ import * as vscode from 'vscode';
 const ARM_64 = "arm64"
 const X_64 = "x64"
 
-type TARGET_ASSERT = "neocmakelsp-x86_64-apple-darwin"
-  | "neocmakelsp-aarch64-apple-darwin"
-  | "neocmakelsp-x86_64-pc-windows-msvc.exe"
-  | "neocmakelsp-x86_64-unknown-linux-gnu"
-  | "neocmakelsp-aarch64-unknown-linux-gnu"
-  | undefined
+type TARGET_ASSERT = "neocmakelsp-x86_64-unknown-linux-gnu.tar.gz"
+  | "neocmakelsp-aarch64-unknown-linux-gnu.tar.gz"
+  | "neocmakelsp-x86_64-pc-windows-msvc.zip"
+  | "neocmakelsp-aarch64-pc-windows-msvc.zip"
+  | "neocmakelsp-universal-apple-darwin.tar.gz"
 
-function targetName(): TARGET_ASSERT {
+
+type LocalAssertInfo = {
+  file: TARGET_ASSERT,
+  runtime: Github.RUNTIME_NAME,
+  type: Github.FILE_TYPE
+}
+
+function targetInfo(): LocalAssertInfo | undefined {
   const arch = os.arch()
   switch (os.platform()) {
     case "win32":
-      return "neocmakelsp-x86_64-pc-windows-msvc.exe"
-    case "darwin":
       if (arch == X_64) {
-        return "neocmakelsp-x86_64-apple-darwin";
-      } else {
-        return "neocmakelsp-aarch64-apple-darwin";
+        return {
+          file: "neocmakelsp-x86_64-pc-windows-msvc.zip",
+          runtime: "neocmakelsp.exe",
+          type: "zip"
+        }
+      } else if (arch == ARM_64) {
+        return {
+          file: "neocmakelsp-aarch64-pc-windows-msvc.zip",
+          runtime: "neocmakelsp.exe",
+          type: "zip"
+        }
+      }
+    case "darwin":
+      return {
+        file: "neocmakelsp-universal-apple-darwin.tar.gz",
+        runtime: "neocmakelsp",
+        type: "tar"
       }
     case "linux":
-      if (arch == ARM_64) {
-        return "neocmakelsp-aarch64-unknown-linux-gnu"
-      } else if (arch == X_64) {
-        return "neocmakelsp-x86_64-unknown-linux-gnu"
+      if (arch == X_64) {
+        return {
+          file: "neocmakelsp-x86_64-unknown-linux-gnu.tar.gz",
+          runtime: "neocmakelsp",
+          type: "tar"
+        }
+      } else if (arch == ARM_64) {
+        return {
+          file: "neocmakelsp-aarch64-unknown-linux-gnu.tar.gz",
+          runtime: "neocmakelsp",
+          type: "tar"
+        }
       }
     default:
       return undefined;
   }
 }
 
-function getGithubAssert(asserts: Github.Asset[]) {
-  const target = targetName();
+
+
+function getGithubAssert(asserts: Github.Asset[]): Github.AssetInfo | undefined {
+  const target = targetInfo();
   if (target === undefined) {
     return undefined;
   }
-  return asserts.find(assert => assert.name === target);
+  let asset = asserts.find(assert => assert.name === target.file);
+  if (!asset) {
+    return;
+  }
+  return { asset, runtime: target.runtime, type: target.type }
 }
 
 export async function installLatestNeocmakeLsp(path: string) {

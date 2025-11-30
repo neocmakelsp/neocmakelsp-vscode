@@ -84,7 +84,7 @@ export async function activate(context: ExtensionContext) {
     // Otherwise the run options are used
     neocmakelspExecutable = {
       command: realPath,
-      args: ['--stdio'],
+      args: ['stdio'],
     };
   }
   const serverOptions: ServerOptions = {
