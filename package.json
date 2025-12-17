@@ -208,7 +208,7 @@
   ],
   "devDependencies": {
     "@types/jest": "^29.5.12",
-    "@types/node": "24.x",
+    "@types/node": "25.x",
     "@types/vscode": "^1.100.0",
     "@types/which": "^3.0.4",
     "@vscode/vsce": "^3.6.0",
