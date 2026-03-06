@@ -1,0 +1,23 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts",
+    "unit_test": "deno test -A",
+    "build": "deno run -A jsr:@nobody/deno-ovsx@0.5.2/bin --build",
+    "publish-openvsx": "deno run -A jsr:@nobody/deno-ovsx@0.5.2/bin --publishOvsx",
+    "publish": "deno run -A jsr:@nobody/deno-ovsx@0.5.2/bin --publishVscode"
+  },
+  "exports": "./src/extension.ts",
+  "imports": {
+    "@aws-sdk/client-s3": "npm:@aws-sdk/client-s3@^3.1002.0",
+    "@deno/esbuild-plugin": "jsr:@deno/esbuild-plugin@^1.2.1",
+    "@std/assert": "jsr:@std/assert@^1.0.19",
+    "@types/vscode": "npm:@types/vscode@^1.96.0",
+    "@types/unzipper": "npm:@types/unzipper@^0.10.11",
+    "esbuild": "npm:esbuild@^0.27.3",
+    "@npm:uuid": "npm:uuid@^13.0.0",
+    "@npm:tar": "npm:tar@^7.5.10",
+    "unzipper": "npm:unzipper@^0.12.3",
+    "vscode-languageclient": "npm:vscode-languageclient@^9.0.1",
+    "@npm:which": "npm:which@^6.0.1"
+  }
+}
