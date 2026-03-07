@@ -17,16 +17,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: "20.x"
-      - run: corepack yarn install
-      - run: corepack yarn test
+      - name: Setup repo
+        uses: actions/checkout@v6
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2 # v2.0.3
+
+      - name: Verify formatting
+        run: deno fmt --check
+
+      - name: Run linter
+        run: deno lint
+
+      - name: Run tests
+        run: deno task unit_test
 
   release:
     permissions:
       contents: write
+      id-token: write # required for OIDC token exchange
 
     if: startsWith(github.ref, 'refs/tags/v')
     needs:
@@ -35,14 +44,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - name: Setup repo
+        uses: actions/checkout@v6
+      - uses: taiki-e/create-gh-release-action@56a8b3f8449593aa02b91f7b84da564f476e94f0 # v1.9.2
         with:
-          node-version: "20.x"
-      - run: corepack yarn install
-      - run: corepack yarn build
-      - run: corepack yarn ovsx publish -p ${{ secrets.OVSX_TOKEN }}
-      - run: corepack yarn vsce publish -p ${{ secrets.VSCE_TOKEN }}
-      - uses: softprops/action-gh-release@v2
-        with:
+          branch: master
+          changelog: CHANGELOG.md
           draft: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2 # v2.0.3
+      - uses: actions/checkout@v6
+      - run: deno task publish-openvsx --pat ${{ secrets.OVSX_TOKEN }}
+      - run: deno task publish --pat ${{ secrets.VSCE_TOKEN }}
+      - name: Publish github release
+        run: |
+          if [[ $(echo "${GTIHUB_REF#refs/tags/v}" | grep '-' > /dev/null) ]]; then
+            gh release edit "${GITHUB_REF#refs/tags/}" --prerelease
+          fi
+          gh release edit "${GITHUB_REF#refs/tags/}" --draft=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
