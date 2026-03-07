@@ -58,7 +58,7 @@
           ".cmake"
         ],
         "filenames": [
-          "CMakelists.txt"
+          "CMakeLists.txt"
         ],
         "aliases": [
           "CMake"
