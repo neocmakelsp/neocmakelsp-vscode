@@ -3,11 +3,13 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project adheres to
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.0.28] - 2026-03-07
 
 ### Changed
+
 - Use deno to build target
 - Update deps
 
@@ -16,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.27] - 2025-10-30
 
 ### Changed
+
 - Fix download problem after 0.9.0 has been published
 
 [0.0.28]: https://github.com/neocmakelsp/neocmakelsp-vscode/compare/v0.0.27...v0.0.26
@@ -23,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.23] - 2025-10-01
 
 ### New
+
 - add debug for cmake
 
 [0.0.23]: https://github.com/neocmakelsp/neocmakelsp-vscode/compare/v0.0.23...v0.0.22
