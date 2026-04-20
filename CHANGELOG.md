@@ -9,7 +9,9 @@ and this project adheres to
 ## [0.0.39] - 2026-04-20
 
 ### Changed
+
 - Fixed the problem the images cannot be shown on homepage
+
 [0.0.30]: https://github.com/neocmakelsp/neocmakelsp-vscode/compare/v0.0.29...v0.0.30
 
 ## [0.0.29] - 2026-03-08
