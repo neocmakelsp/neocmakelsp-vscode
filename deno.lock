@@ -15,7 +15,7 @@
     "npm:unzipper@~0.12.3": "0.12.3",
     "npm:uuid@13": "13.0.0",
     "npm:vscode-languageclient@^9.0.1": "9.0.1",
-    "npm:which@^6.0.1": "6.0.1"
+    "npm:which@7": "7.0.0"
   },
   "jsr": {
     "@deno/esbuild-plugin@1.2.1": {
@@ -1517,8 +1517,8 @@
     "vscode-languageserver-types@3.17.5": {
       "integrity": "sha512-Ld1VelNuX9pdF39h2Hgaeb5hEZM2Z3jUrrMgWQAu82jMtZp7p3vJT3BzToKtZI7NgQssZje5o0zryOrhQvzQAg=="
     },
-    "which@6.0.1": {
-      "integrity": "sha512-oGLe46MIrCRqX7ytPUf66EAYvdeMIZYn3WaocqqKZAxrBpkqHfL/qvTyJ/bTk5+AqHCjXmrv3CEWgy368zhRUg==",
+    "which@7.0.0": {
+      "integrity": "sha512-RancgH2dmbLdHl6LRhEqvklWMgl/Hdnun0Y90KhBOLkMefg8Qa7/Zel8Sm+8HEcP6DEjzsWzpkuBQEZok58isA==",
       "dependencies": [
         "isexe"
       ],
@@ -1540,7 +1540,7 @@
       "npm:unzipper@~0.12.3",
       "npm:uuid@13",
       "npm:vscode-languageclient@^9.0.1",
-      "npm:which@^6.0.1"
+      "npm:which@7"
     ]
   }
 }
