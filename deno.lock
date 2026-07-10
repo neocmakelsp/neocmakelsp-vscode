@@ -8,7 +8,7 @@
     "jsr:@std/path@^1.1.1": "1.1.4",
     "npm:@aws-sdk/client-s3@^3.1002.0": "3.1002.0",
     "npm:@types/unzipper@~0.10.11": "0.10.11",
-    "npm:@types/vscode@^1.96.0": "1.109.0",
+    "npm:@types/vscode@^1.125.0": "1.125.0",
     "npm:esbuild@~0.25.5": "0.25.12",
     "npm:esbuild@~0.27.3": "0.27.3",
     "npm:tar@^7.5.10": "7.5.10",
@@ -1275,8 +1275,8 @@
         "@types/node"
       ]
     },
-    "@types/vscode@1.109.0": {
-      "integrity": "sha512-0Pf95rnwEIwDbmXGC08r0B4TQhAbsHQ5UyTIgVgoieDe4cOnf92usuR5dEczb6bTKEp7ziZH4TV1TRGPPCExtw=="
+    "@types/vscode@1.125.0": {
+      "integrity": "sha512-0icm/ZQAaism87P0ekHqi4/Ju9du+Tm0RUW+y7vqRsxY2cY0FNRX1nAnaW7nT6npPt2tfHiheZ55Zm9UhqonFA=="
     },
     "balanced-match@1.0.2": {
       "integrity": "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw=="
@@ -1534,7 +1534,7 @@
       "jsr:@std/assert@^1.0.19",
       "npm:@aws-sdk/client-s3@^3.1002.0",
       "npm:@types/unzipper@~0.10.11",
-      "npm:@types/vscode@^1.96.0",
+      "npm:@types/vscode@^1.125.0",
       "npm:esbuild@~0.27.3",
       "npm:tar@^7.5.10",
       "npm:unzipper@~0.12.3",
