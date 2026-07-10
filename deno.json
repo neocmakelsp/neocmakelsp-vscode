@@ -13,7 +13,7 @@
     "@std/assert": "jsr:@std/assert@^1.0.19",
     "@types/vscode": "npm:@types/vscode@^1.125.0",
     "@types/unzipper": "npm:@types/unzipper@^0.10.11",
-    "esbuild": "npm:esbuild@^0.27.3",
+    "esbuild": "npm:esbuild@^0.28.1",
     "@npm:uuid": "npm:uuid@^13.0.0",
     "@npm:tar": "npm:tar@^7.5.10",
     "unzipper": "npm:unzipper@^0.12.3",
