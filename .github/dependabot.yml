@@ -6,8 +6,9 @@
 # docs
 # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 version: 2
+enable-beta-ecosystems: true
 updates:
-  - package-ecosystem: "npm"
+  - package-ecosystem: "deno"
     directory: "/"
     schedule:
       interval: "weekly"
