@@ -13,7 +13,7 @@
     "npm:esbuild@~0.28.1": "0.28.1",
     "npm:tar@^7.5.10": "7.5.10",
     "npm:unzipper@~0.12.3": "0.12.3",
-    "npm:uuid@13": "13.0.0",
+    "npm:uuid@^14.0.1": "14.0.1",
     "npm:vscode-languageclient@^9.0.1": "9.0.1",
     "npm:which@7": "7.0.0"
   },
@@ -772,8 +772,8 @@
     "util-deprecate@1.0.2": {
       "integrity": "sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw=="
     },
-    "uuid@13.0.0": {
-      "integrity": "sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==",
+    "uuid@14.0.1": {
+      "integrity": "sha512-6ZxzVpzDXDa3bJWaHilVayA+BH/1zmxCJoVgvmqJnid/gPoKHxUrS/aC/T6LGQtNHT+XHG9fXPJB4d+IrU30Ew==",
       "bin": true
     },
     "vscode-jsonrpc@8.2.0": {
@@ -818,7 +818,7 @@
       "npm:esbuild@~0.28.1",
       "npm:tar@^7.5.10",
       "npm:unzipper@~0.12.3",
-      "npm:uuid@13",
+      "npm:uuid@^14.0.1",
       "npm:vscode-languageclient@^9.0.1",
       "npm:which@7"
     ]
