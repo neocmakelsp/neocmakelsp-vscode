@@ -3,8 +3,8 @@ import * as fs from "node:fs";
 import * as stream from "node:stream";
 import * as unzipper from "unzipper";
 
-import path from "path";
-import { promisify } from "util";
+import path from "node:path";
+import { promisify } from "node:util";
 import * as tar from "@npm:tar";
 import * as Github from "./github.ts";
 
