@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Deno
         uses: denoland/setup-deno@v2 # v2.0.3
@@ -45,7 +45,7 @@ jobs:
 
     steps:
       - name: Setup repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - uses: taiki-e/create-gh-release-action@eba8ea96c86cca8a37f1b56e94b4d13301fba651 # v1.11.0
         with:
           branch: master
@@ -54,7 +54,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Deno
         uses: denoland/setup-deno@v2 # v2.0.3
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: deno task publish-openvsx --pat ${{ secrets.OVSX_TOKEN }}
       - run: deno task publish --pat ${{ secrets.VSCE_TOKEN }}
       - name: Publish github release
