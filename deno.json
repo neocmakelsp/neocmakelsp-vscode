@@ -18,6 +18,6 @@
     "@npm:tar": "npm:tar@^7.5.10",
     "unzipper": "npm:unzipper@^0.12.3",
     "vscode-languageclient": "npm:vscode-languageclient@^9.0.1",
-    "@npm:which": "npm:which@^6.0.1"
+    "@npm:which": "npm:which@^7.0.0"
   }
 }
