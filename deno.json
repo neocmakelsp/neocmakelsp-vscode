@@ -17,7 +17,7 @@
     "@npm:uuid": "npm:uuid@^14.0.1",
     "@npm:tar": "npm:tar@^7.5.10",
     "unzipper": "npm:unzipper@^0.12.3",
-    "vscode-languageclient": "npm:vscode-languageclient@^9.0.1",
+    "vscode-languageclient": "npm:vscode-languageclient@^10.1.0",
     "@npm:which": "npm:which@^7.0.0"
   }
 }
