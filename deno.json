@@ -11,7 +11,7 @@
     "@aws-sdk/client-s3": "npm:@aws-sdk/client-s3@^3.1084.0",
     "@deno/esbuild-plugin": "jsr:@deno/esbuild-plugin@^1.2.1",
     "@std/assert": "jsr:@std/assert@^1.0.19",
-    "@types/vscode": "npm:@types/vscode@^1.125.0",
+    "vscode": "npm:@types/vscode@^1.125.0",
     "@types/unzipper": "npm:@types/unzipper@^0.10.11",
     "esbuild": "npm:esbuild@^0.28.1",
     "@npm:uuid": "npm:uuid@^14.0.1",
