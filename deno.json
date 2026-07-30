@@ -1,10 +1,11 @@
 {
+  "version": "0.0.30",
   "tasks": {
     "dev": "deno run --watch main.ts",
     "unit_test": "deno test -A",
-    "build": "deno run -A jsr:@nobody/deno-ovsx@0.7.3/bin --build",
-    "publish-openvsx": "deno run -A jsr:@nobody/deno-ovsx@0.7.3/bin --publishOvsx",
-    "publish": "deno run -A jsr:@nobody/deno-ovsx@0.7.3/bin --publishVscode"
+    "build": "deno run -A jsr:@nobody/deno-ovsx@0.8.0/bin --build",
+    "publish-openvsx": "deno run -A jsr:@nobody/deno-ovsx@0.8.0/bin --publishOvsx",
+    "publish": "deno run -A jsr:@nobody/deno-ovsx@0.8.0/bin --publishVscode"
   },
   "exports": "./src/extension.ts",
   "imports": {

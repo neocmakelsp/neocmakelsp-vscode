@@ -3,7 +3,6 @@
   "description": "vscode extension for neocmakelsp",
   "author": "Decodetalkers",
   "license": "MIT",
-  "version": "0.0.30",
   "publisher": "Decodetalkers",
   "icon": "icon.png",
   "categories": [
