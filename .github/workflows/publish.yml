@@ -53,6 +53,6 @@ jobs:
       - run: corepack pnpm build
       - run: corepack pnpm ovsx publish -p ${{ secrets.OVSX_TOKEN }}
       - run: corepack pnpm vsce publish -p ${{ secrets.VSCE_TOKEN }}
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           draft: true
