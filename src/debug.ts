@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { v4 as uuidv4 } from "@npm:uuid";
+import { v4 as uuidv4 } from "uuid";
 
 import fs from "node:fs";
 import * as proc from "node:child_process";
@@ -106,7 +106,7 @@ export class CMakeDebugAdapterDescriptorFactory
       ? DebugOrigin.originatedFromCommand
       : DebugOrigin.originatedFromLaunchConfiguration;
     const script = session.configuration.scriptPath;
-    if (script != undefined && !fs.existsSync(script)) {
+    if (script !== undefined && !fs.existsSync(script)) {
       throw new Error(
         `cmake.debug.scriptPath.does.not.exist, The script path, \"${script}\", could not be found`,
       );

@@ -1,7 +1,7 @@
 import * as os from "node:os";
 
-import * as Github from "./github.ts";
-import * as Download from "./download.ts";
+import * as Github from "./github";
+import * as Download from "./download";
 
 import * as vscode from "vscode";
 
@@ -25,13 +25,13 @@ function targetInfo(): LocalAssertInfo | undefined {
   const arch = os.arch();
   switch (os.platform()) {
     case "win32":
-      if (arch == X_64) {
+      if (arch === X_64) {
         return {
           file: "neocmakelsp-x86_64-pc-windows-msvc.zip",
           runtime: "neocmakelsp.exe",
           type: "zip",
         };
-      } else if (arch == ARM_64) {
+      } else if (arch === ARM_64) {
         return {
           file: "neocmakelsp-aarch64-pc-windows-msvc.zip",
           runtime: "neocmakelsp.exe",
@@ -46,13 +46,13 @@ function targetInfo(): LocalAssertInfo | undefined {
         type: "tar",
       };
     case "linux":
-      if (arch == X_64) {
+      if (arch === X_64) {
         return {
           file: "neocmakelsp-x86_64-unknown-linux-gnu.tar.gz",
           runtime: "neocmakelsp",
           type: "tar",
         };
-      } else if (arch == ARM_64) {
+      } else if (arch === ARM_64) {
         return {
           file: "neocmakelsp-aarch64-unknown-linux-gnu.tar.gz",
           runtime: "neocmakelsp",

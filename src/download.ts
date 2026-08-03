@@ -5,8 +5,8 @@ import * as unzipper from "unzipper";
 
 import path from "node:path";
 import { promisify } from "node:util";
-import * as tar from "@npm:tar";
-import * as Github from "./github.ts";
+import * as tar from "tar";
+import * as Github from "./github";
 
 type DownloadProgress = vscode.Progress<
   { message?: string; increment?: number }
@@ -62,11 +62,11 @@ async function download(
       throw e;
     },
   );
-  if (file_type == "tar") {
+  if (file_type === "tar") {
     await tar.x({ file: untarFile, C: storagePath });
   } else {
     const directory = await unzipper.Open.file(untarFile);
-    if (directory.files.length == 0) {
+    if (directory.files.length === 0) {
       throw new Error("No file");
     }
     directory.files[0].stream().pipe(fs.createWriteStream(targetFile)).on(
