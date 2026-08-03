@@ -4,3 +4,4 @@
 /neocmakelsp-vscode-*.vsix
 /*.vsix
 /.vscode-test
+/dist

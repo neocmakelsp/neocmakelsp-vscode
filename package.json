@@ -17,7 +17,7 @@
     "url": "https://github.com/neocmakelsp/neocmakelsp-vscode"
   },
   "engines": {
-    "vscode": "^1.100.0"
+    "vscode": "^1.125.0"
   },
   "contributes": {
     "configuration": {
@@ -220,17 +220,24 @@
     "typescript": "^6.0.3",
     "@vscode/test-cli": "^0.0.15",
     "@vscode/test-electron": "^3.0.0",
-    "@types/mocha": "^10.0.10"
+    "@types/mocha": "^10.0.10",
+    "eslint": "^10.5.0",
+    "typescript-eslint": "^8.61.1"
   },
   "scripts": {
-    "esbuild": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
-    "build": "vsce package",
-    "publish": "vsce publish",
-    "publish-openvsx": "ovsx publish",
-    "vscode:prepublish": "npm run check-ts && npm run esbuild -- --minify --keep-names",
-    "compile": "npm run esbuild -- --sourcemap",
-    "check-ts": "tsc -noEmit -p ./",
-    "watch": "tsc -watch -p ./",
+    "build": "pnpm vsce package --no-dependencies",
+    "publish": "pnpm vsce publish --no-dependencies",
+    "publish-openvsx": "pnpm ovsx publish",
+    "vscode:prepublish": "pnpm run package",
+    "compile": "pnpm run check-types && pnpm run lint && node esbuild.js",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "pnpm run check-types && pnpm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
     "test": "vscode-test"
   }
 }
