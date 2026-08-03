@@ -21,8 +21,13 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: "22.x"
-      - run: corepack yarn install
-      - run: corepack yarn test
+      - uses: pnpm/setup@v1
+        with:
+          version: 11
+          runtime: node@22
+          cache: true
+      - run: corepack pnpm install
+      - run: corepack pnpm test
 
   release:
     permissions:
@@ -38,11 +43,16 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
-          node-version: "20.x"
-      - run: corepack yarn install
-      - run: corepack yarn build
-      - run: corepack yarn ovsx publish -p ${{ secrets.OVSX_TOKEN }}
-      - run: corepack yarn vsce publish -p ${{ secrets.VSCE_TOKEN }}
+          node-version: "22.x"
+      - uses: pnpm/setup@v1
+        with:
+          version: 11
+          runtime: node@22
+          cache: true
+      - run: corepack pnpm install
+      - run: corepack pnpm build
+      - run: corepack pnpm ovsx publish -p ${{ secrets.OVSX_TOKEN }}
+      - run: corepack pnpm vsce publish -p ${{ secrets.VSCE_TOKEN }}
       - uses: softprops/action-gh-release@v2
         with:
           draft: true
