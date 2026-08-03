@@ -82,7 +82,7 @@ export async function activate(context: ExtensionContext) {
   const lsp_snippets = get<boolean>("lsp_snippets");
 
   let ncCommand = "nc";
-  if (platform == "win32") {
+  if (platform === "win32") {
     ncCommand = "ncat";
   }
   if (tcp === true) {

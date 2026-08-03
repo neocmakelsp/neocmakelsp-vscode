@@ -20,4 +20,4 @@ suite('Extension Test Suite', () => {
     assert.equal(true, version_is_latest("1.1.1.2", "1.1.1"));
     assert.equal(false, version_is_latest("1.1.1", "1.0.1"));
   });
-})
+});

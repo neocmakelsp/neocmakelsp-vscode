@@ -106,7 +106,7 @@ export class CMakeDebugAdapterDescriptorFactory
       ? DebugOrigin.originatedFromCommand
       : DebugOrigin.originatedFromLaunchConfiguration;
     const script = session.configuration.scriptPath;
-    if (script != undefined && !fs.existsSync(script)) {
+    if (script !== undefined && !fs.existsSync(script)) {
       throw new Error(
         `cmake.debug.scriptPath.does.not.exist, The script path, \"${script}\", could not be found`,
       );

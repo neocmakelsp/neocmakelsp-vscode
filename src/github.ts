@@ -1,5 +1,5 @@
 import which from "which";
-import * as child_process from "node:child_process";
+import * as childProcess from "node:child_process";
 import { version_is_latest } from "./util";
 
 const githubReleaseURL =
@@ -75,7 +75,7 @@ export async function getNeocmakeVersion(path: string) {
 }
 
 async function run(command: string, flags: string[]): Promise<string> {
-  const child = child_process.spawn(command, flags, {
+  const child = childProcess.spawn(command, flags, {
     stdio: ["ignore", "pipe", "ignore"],
   });
   let output = "";
