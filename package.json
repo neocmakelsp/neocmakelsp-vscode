@@ -214,11 +214,13 @@
     "@vscode/vsce": "^3.6.0",
     "assert": "^2.1.0",
     "esbuild": "^0.25.0",
-    "jest": "^29.7.0",
     "ovsx": "^0.10.0",
     "ts-jest": "^29.3.0",
     "@types/unzipper": "^0.10.11",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.0.0",
+    "@types/mocha": "^10.0.10"
   },
   "scripts": {
     "esbuild": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
@@ -229,6 +231,6 @@
     "compile": "npm run esbuild -- --sourcemap",
     "check-ts": "tsc -noEmit -p ./",
     "watch": "tsc -watch -p ./",
-    "test": "jest"
+    "test": "vscode-test"
   }
 }

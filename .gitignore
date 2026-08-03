@@ -3,3 +3,4 @@
 /neocmake-lsp-vscode-*.vsix
 /neocmakelsp-vscode-*.vsix
 /*.vsix
+/.vscode-test

@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
-    "module": "nodenext",
-    "target": "es2020",
+    "module": "Node16",
+    "target": "ES2022",
     "lib": [
-      "es2020"
+      "es2022"
     ],
-    "moduleResolution": "nodenext",
+    "types": [
+      "node",
+      "mocha"
+    ],
     "outDir": "out",
     "rootDir": "src",
     "skipLibCheck": true,
