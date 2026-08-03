@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { v4 as uuidv4 } from "@npm:uuid";
+import { v4 as uuidv4 } from "uuid";
 
 import fs from "node:fs";
 import * as proc from "node:child_process";

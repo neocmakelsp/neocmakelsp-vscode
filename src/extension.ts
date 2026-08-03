@@ -8,13 +8,13 @@ import {
   type LanguageClientOptions,
   type ServerOptions,
 } from "vscode-languageclient/node";
-import { get } from "./config.ts";
+import { get } from "./config";
 import {
   CMakeDebugAdapterDescriptorFactory,
   getDebuggerPipeName,
-} from "./debug.ts";
-import type { SourceFileNode } from "./outlines.ts";
-import { installLatestNeocmakeLsp } from "./install.ts";
+} from "./debug";
+import type { SourceFileNode } from "./outlines";
+import { installLatestNeocmakeLsp } from "./install";
 let client: LanguageClient | undefined;
 
 const platform = os.platform();

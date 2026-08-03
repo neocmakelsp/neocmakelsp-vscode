@@ -1,7 +1,7 @@
 import * as os from "node:os";
 
-import * as Github from "./github.ts";
-import * as Download from "./download.ts";
+import * as Github from "./github";
+import * as Download from "./download";
 
 import * as vscode from "vscode";
 

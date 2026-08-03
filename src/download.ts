@@ -5,8 +5,8 @@ import * as unzipper from "unzipper";
 
 import path from "node:path";
 import { promisify } from "node:util";
-import * as tar from "@npm:tar";
-import * as Github from "./github.ts";
+import * as tar from "tar";
+import * as Github from "./github";
 
 type DownloadProgress = vscode.Progress<
   { message?: string; increment?: number }
