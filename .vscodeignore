@@ -10,3 +10,4 @@ src/**
 **/*.ts
 node_modules/**
 ./neocmakelsp-vscode-*.vsix
+neocmakelsp

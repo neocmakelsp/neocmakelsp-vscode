@@ -179,8 +179,23 @@
         "title": "debug current cmake workspace",
         "categories": "CMake",
         "when": "neocmakelsp.debug == true"
+      },
+      {
+        "command": "neocmakelsp.cmakeTargets",
+        "categories": "CMake",
+        "title": "CMake targets",
+        "icon": "$(list-tree)"
       }
     ],
+    "views": {
+      "explorer": [
+        {
+          "id": "neocmakelsp.cmakeTargets",
+          "name": "CMake Targets",
+          "when": "neocmakelsp.cmakeTargets.hasData"
+        }
+      ]
+    },
     "grammars": [
       {
         "language": "cmake",

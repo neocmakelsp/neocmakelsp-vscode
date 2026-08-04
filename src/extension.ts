@@ -1,5 +1,6 @@
 import { type ExtensionContext, workspace } from "vscode";
 import * as vscode from "vscode";
+import * as targets from "./targets"
 
 import * as os from "node:os";
 
@@ -15,14 +16,11 @@ import {
 } from "./debug";
 import type { SourceFileNode } from "./outlines";
 import { installLatestNeocmakeLsp } from "./install";
-let client: LanguageClient | undefined;
 
 const platform = os.platform();
-export function add(a: number, b: number): number {
-  return a + b;
-}
-function setupDebug(context: vscode.ExtensionContext) {
-  context.subscriptions.push(
+
+function setupDebug(subscriptions: vscode.Disposable[]) {
+  subscriptions.push(
     vscode.debug.registerDebugAdapterDescriptorFactory(
       "cmake",
       new CMakeDebugAdapterDescriptorFactory(),
@@ -69,81 +67,102 @@ function setupDebug(context: vscode.ExtensionContext) {
     },
   );
 }
-export async function activate(context: ExtensionContext) {
-  if (get<boolean>("debug")) {
-    setupDebug(context);
-  }
 
-  let neocmakelspExecutable = undefined;
+export class NeocmakeContext implements vscode.Disposable {
+  subscriptions: vscode.Disposable[];
+  client: LanguageClient;
 
-  const tcp = get<boolean>("tcp");
-
-  const localtarget = get<boolean>("localtarget");
-  const lsp_snippets = get<boolean>("lsp_snippets");
-
-  let ncCommand = "nc";
-  if (platform === "win32") {
-    ncCommand = "ncat";
-  }
-  if (tcp === true) {
-    neocmakelspExecutable = {
-      command: ncCommand,
-      args: ["localhost", "9257"],
-    };
-  } else {
-    let realPath = get<string>("path");
-    if (localtarget !== true) {
-      const exPath = context.extensionPath;
-
-      const path = await installLatestNeocmakeLsp(exPath);
-      if (path !== undefined) {
-        realPath = path;
-      }
+  static async create(
+    context: ExtensionContext
+  ): Promise<NeocmakeContext> {
+    const subscriptions: vscode.Disposable[] = []
+    if (get<boolean>("debug")) {
+      setupDebug(subscriptions);
     }
-    // The server is implemented in node
-    // If the extension is launched in debug mode then the debug server options are used
-    // Otherwise the run options are used
-    neocmakelspExecutable = {
-      command: realPath!,
-      args: ["stdio"],
+
+    let neocmakelspExecutable = undefined;
+
+    const tcp = get<boolean>("tcp");
+
+    const localtarget = get<boolean>("localtarget");
+    const lsp_snippets = get<boolean>("lsp_snippets");
+
+    let ncCommand = "nc";
+    if (platform === "win32") {
+      ncCommand = "ncat";
+    }
+    if (tcp === true) {
+      neocmakelspExecutable = {
+        command: ncCommand,
+        args: ["localhost", "9257"],
+      };
+    } else {
+      let realPath = get<string>("path");
+      if (localtarget !== true) {
+        const exPath = context.extensionPath;
+
+        const path = await installLatestNeocmakeLsp(exPath);
+        if (path !== undefined) {
+          realPath = path;
+        }
+      }
+      // The server is implemented in node
+      // If the extension is launched in debug mode then the debug server options are used
+      // Otherwise the run options are used
+      neocmakelspExecutable = {
+        command: realPath!,
+        args: ["stdio"],
+      };
+    }
+    const serverOptions: ServerOptions = {
+      run: neocmakelspExecutable!,
+      debug: neocmakelspExecutable!,
     };
+
+    // Options to control the language client
+    const clientOptions: LanguageClientOptions = {
+      // Register the server for plain text documents
+      documentSelector: [{ scheme: "file", language: "cmake" }],
+      synchronize: {
+        // Notify the server about file changes to '.clientrc files contained in the workspace
+        fileEvents: workspace.createFileSystemWatcher("**/CMakeCache.txt"),
+      },
+      initializationOptions: {
+        semantic_token: true,
+        use_snippets: lsp_snippets,
+      },
+    };
+
+    // Create the language client and start the client.
+    const client = new LanguageClient(
+      "neocmakelsp",
+      "neocmakelsp",
+      serverOptions,
+      clientOptions,
+    );
+    return new NeocmakeContext(subscriptions, client)
   }
-  const serverOptions: ServerOptions = {
-    run: neocmakelspExecutable!,
-    debug: neocmakelspExecutable!,
-  };
 
-  // Options to control the language client
-  const clientOptions: LanguageClientOptions = {
-    // Register the server for plain text documents
-    documentSelector: [{ scheme: "file", language: "cmake" }],
-    synchronize: {
-      // Notify the server about file changes to '.clientrc files contained in the workspace
-      fileEvents: workspace.createFileSystemWatcher("**/CMakeCache.txt"),
-    },
-    initializationOptions: {
-      semantic_token: true,
-      use_snippets: lsp_snippets,
-    },
-  };
+  private constructor(subscriptions: vscode.Disposable[], client: LanguageClient) {
+    this.subscriptions = subscriptions;
+    this.client = client;
+    this.startClient();
+  }
 
-  // Create the language client and start the client.
-  client = new LanguageClient(
-    "neocmakelsp",
-    "neocmakelsp",
-    serverOptions,
-    clientOptions,
-  );
+  async startClient() {
+    targets.activate(this);
+    this.client.start()
+  }
 
-  // Start the client. This will also launch the server
-  client.start();
+  dispose() {
+    this.subscriptions.forEach((d) => { d.dispose(); });
+    if (this.client) {
+      this.client.stop();
+    }
+    this.subscriptions = [];
+  }
 }
 
-export async function deactivate(): Promise<void> {
-  if (!client) {
-    return undefined;
-  }
-  await client.stop();
-
-  client = undefined;
+export async function activate(context: ExtensionContext) {
+  return await NeocmakeContext.create(context)
 }
