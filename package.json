@@ -143,18 +143,6 @@
         ]
       }
     ],
-    "menus": {
-      "commandPalette": [
-        {
-          "command": "neocmakelsp.outline.runScriptDebugger",
-          "when": "neocmakelsp.debug == true"
-        },
-        {
-          "command": "neocmakelsp.outline.runConfigureDebugger",
-          "when": "neocmakelsp.debug == true"
-        }
-      ]
-    },
     "commands": [
       {
         "command": "neocmakelsp.runScriptDebugger",
@@ -185,14 +173,38 @@
         "categories": "CMake",
         "title": "CMake targets",
         "icon": "$(list-tree)"
+      },
+      {
+        "command": "neocmakelsp.cmakeTargets.refreshEntry",
+        "categories": "CMake",
+        "title": "refresh",
+        "icon": "$(refresh)"
       }
     ],
     "views": {
       "explorer": [
         {
           "id": "neocmakelsp.cmakeTargets",
-          "name": "CMake Targets",
-          "when": "neocmakelsp.cmakeTargets.hasData"
+          "name": "CMake Targets"
+        }
+      ]
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "neocmakelsp.outline.runScriptDebugger",
+          "when": "neocmakelsp.debug == true"
+        },
+        {
+          "command": "neocmakelsp.outline.runConfigureDebugger",
+          "when": "neocmakelsp.debug == true"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "neocmakelsp.cmakeTargets.refreshEntry",
+          "when": "view == neocmakelsp.cmakeTargets",
+          "group": "navigation"
         }
       ]
     },

@@ -4,7 +4,7 @@ import { NeocmakeContext } from './extension';
 
 const TargetMethod = "neocmake/cmake_targets";
 
-const TargetRequestType = new vscodelc.RequestType0<CMakeTargets | null, void>(TargetMethod)
+const TargetRequestType = new vscodelc.RequestType0<CMakeTargets | null, void>(TargetMethod);
 
 export type Target = {
   build_type: string,
@@ -33,20 +33,28 @@ export function activate(context: NeocmakeContext) {
 }
 
 class TargetFeature implements vscodelc.StaticFeature {
+  adapter: TargetsProvider;
   constructor(private context: NeocmakeContext) {
     const adapter = new TargetsProvider();
     const tree = vscode.window.createTreeView("neocmakelsp.cmakeTargets", { treeDataProvider: adapter });
     context.subscriptions.push(tree,
       adapter.onDidChangeTreeData((_) => {
-        vscode.commands.executeCommand('setContext', 'neocmakelsp.cmakeTargets.hasData', true)
+        vscode.commands.executeCommand('setContext', 'neocmakelsp.cmakeTargets.hasData', true);
         // @ts-ignore
-        tree.reveal(null)
+        tree.reveal(null);
+      }),
+      vscode.commands.registerCommand("neocmakelsp.cmakeTargets.refreshEntry", async () => {
+        await this.refresh();
       }),
       vscode.commands.registerTextEditorCommand("neocmakelsp.cmakeTargets", async (_editor, _edit) => {
-        const item = await this.context.client.sendRequest(TargetRequestType);
-        adapter.setTargets(item);
+        await this.refresh();
       })
-    )
+    );
+    this.adapter = adapter;
+  }
+  async refresh() {
+    const item = await this.context.client.sendRequest(TargetRequestType);
+    this.adapter.setTargets(item);
   }
   initialize(_capabilities: vscodelc.ServerCapabilities, _documentSelector: vscodelc.DocumentSelector | undefined): void {
 
@@ -58,7 +66,7 @@ class TargetFeature implements vscodelc.StaticFeature {
 
   }
   getState(): vscodelc.FeatureState {
-    return { kind: "static" }
+    return { kind: "static" };
   }
 }
 
@@ -69,19 +77,22 @@ export class TargetsProvider implements vscode.TreeDataProvider<Target> {
   readonly onDidChangeTreeData: vscode.Event<Target | null> = this._onDidChangeTreeData.event;
   setTargets(targets: CMakeTargets | null) {
     this.targets = targets;
-    this._onDidChangeTreeData.fire(null)
+    this._onDidChangeTreeData.fire(null);
   }
   getChildren(element?: Target | undefined): Target[] {
     if (element != undefined || this.targets == undefined) {
-      return []
+      return [];
     }
     return Object.values(this.targets);
   }
+
   getTreeItem(element: Target): vscode.TreeItem {
-    return new vscode.TreeItem(element.name)
+    const item = new vscode.TreeItem(element.name);
+    item.tooltip = `${element.name}-${element.build_type}`;
+    return item;
   }
 
   getParent(_element: Target): Target | undefined {
-    return undefined
+    return undefined;
   }
 }

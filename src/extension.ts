@@ -1,6 +1,6 @@
 import { type ExtensionContext, workspace } from "vscode";
 import * as vscode from "vscode";
-import * as targets from "./targets"
+import * as targets from "./targets";
 
 import * as os from "node:os";
 
@@ -75,7 +75,7 @@ export class NeocmakeContext implements vscode.Disposable {
   static async create(
     context: ExtensionContext
   ): Promise<NeocmakeContext> {
-    const subscriptions: vscode.Disposable[] = []
+    const subscriptions: vscode.Disposable[] = [];
     if (get<boolean>("debug")) {
       setupDebug(subscriptions);
     }
@@ -140,7 +140,7 @@ export class NeocmakeContext implements vscode.Disposable {
       serverOptions,
       clientOptions,
     );
-    return new NeocmakeContext(subscriptions, client)
+    return new NeocmakeContext(subscriptions, client);
   }
 
   private constructor(subscriptions: vscode.Disposable[], client: LanguageClient) {
@@ -151,7 +151,7 @@ export class NeocmakeContext implements vscode.Disposable {
 
   async startClient() {
     targets.activate(this);
-    this.client.start()
+    this.client.start();
   }
 
   dispose() {
@@ -164,5 +164,5 @@ export class NeocmakeContext implements vscode.Disposable {
 }
 
 export async function activate(context: ExtensionContext) {
-  return await NeocmakeContext.create(context)
+  return await NeocmakeContext.create(context);
 }
