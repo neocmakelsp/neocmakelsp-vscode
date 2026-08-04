@@ -7,8 +7,7 @@
     ],
     "moduleResolution": "nodenext",
     "types": [
-      "node",
-      "mocha"
+      "node"
     ],
     "outDir": "out",
     "rootDir": "src",

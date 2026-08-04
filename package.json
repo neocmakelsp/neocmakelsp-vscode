@@ -207,22 +207,24 @@
   ],
   "main": "./out/extension.js",
   "devDependencies": {
-    "@types/jest": "^29.5.12",
+    "@eslint/js": "^10.0.1",
+    "@jest/globals": "^30.4.1",
+    "@types/jest": "^29.5.14",
+    "@types/mocha": "^10.0.10",
     "@types/node": "24.x",
+    "@types/unzipper": "^0.10.11",
     "@types/vscode": "^1.125.0",
     "@types/which": "^3.0.4",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.0.0",
     "@vscode/vsce": "^3.6.0",
     "assert": "^2.1.0",
     "esbuild": "^0.25.0",
-    "ovsx": "^0.10.0",
-    "ts-jest": "^29.3.0",
-    "@types/unzipper": "^0.10.11",
-    "typescript": "^6.0.3",
-    "@vscode/test-cli": "^0.0.15",
-    "@vscode/test-electron": "^3.0.0",
-    "@types/mocha": "^10.0.10",
-    "@eslint/js": "^10.0.1",
     "eslint": "^10.5.0",
+    "jest": "^30.4.2",
+    "ovsx": "^0.10.0",
+    "ts-jest": "^29.4.12",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.1"
   },
   "scripts": {
@@ -239,6 +241,7 @@
     "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
     "check-types": "tsc --noEmit",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "jest",
+    "vscode-test": "vscode-test"
   }
 }
