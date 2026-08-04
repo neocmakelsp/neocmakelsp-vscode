@@ -12,6 +12,7 @@
     "outDir": "out",
     "rootDir": "src",
     "skipLibCheck": true,
+    "isolatedModules": true,
     "sourceMap": true
   },
   "include": [
