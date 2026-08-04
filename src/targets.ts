@@ -43,8 +43,13 @@ class TargetFeature implements vscodelc.StaticFeature {
         // @ts-ignore
         tree.reveal(null);
       }),
+      context.onDidFinish(async () => {
+        await this.refresh();
+      }),
       vscode.commands.registerCommand("neocmakelsp.cmakeTargets.refreshEntry", async () => {
         await this.refresh();
+      }),
+      vscode.commands.registerCommand("neocmakelsp.cmakeTargets.run", async () => {
       }),
       vscode.commands.registerTextEditorCommand("neocmakelsp.cmakeTargets", async (_editor, _edit) => {
         await this.refresh();
@@ -88,6 +93,11 @@ export class TargetsProvider implements vscode.TreeDataProvider<Target> {
 
   getTreeItem(element: Target): vscode.TreeItem {
     const item = new vscode.TreeItem(element.name);
+    if (element.info.type == "EXECUTABLE") {
+      item.contextValue = "executable"
+    } else {
+      item.contextValue = "library"
+    }
     item.tooltip = `${element.name}-${element.build_type}`;
     return item;
   }

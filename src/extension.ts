@@ -72,6 +72,8 @@ export class NeocmakeContext implements vscode.Disposable {
   subscriptions: vscode.Disposable[];
   client: LanguageClient;
 
+  private _onDidFinish = new vscode.EventEmitter<void>();
+  readonly onDidFinish: vscode.Event<void> = this._onDidFinish.event;
   static async create(
     context: ExtensionContext
   ): Promise<NeocmakeContext> {
@@ -147,6 +149,7 @@ export class NeocmakeContext implements vscode.Disposable {
     this.subscriptions = subscriptions;
     this.client = client;
     this.startClient();
+    this._onDidFinish.fire();
   }
 
   async startClient() {

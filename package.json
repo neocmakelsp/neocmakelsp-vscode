@@ -179,6 +179,12 @@
         "categories": "CMake",
         "title": "refresh",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "neocmakelsp.cmakeTargets.run",
+        "categories": "CMake",
+        "title": "run",
+        "icon": "$(run)"
       }
     ],
     "views": {
@@ -205,6 +211,13 @@
           "command": "neocmakelsp.cmakeTargets.refreshEntry",
           "when": "view == neocmakelsp.cmakeTargets",
           "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "neocmakelsp.cmakeTargets.run",
+          "when": "view == neocmakelsp.cmakeTargets && viewItem == executable",
+          "group": "inline"
         }
       ]
     },
