@@ -1,7 +1,9 @@
 import * as vscodelc from 'vscode-languageclient/node';
 import * as vscode from 'vscode';
 import { NeocmakeContext } from './extension';
+import * as path from "path";
 
+import * as childProcess from "node:child_process";
 const TargetMethod = "neocmake/cmake_targets";
 
 const TargetRequestType = new vscodelc.RequestType0<CMakeTargets | null, void>(TargetMethod);
@@ -13,7 +15,7 @@ export type Target = {
 }
 
 export type TargetInfo = {
-  artifacts: [Artifact],
+  artifacts: Artifact[],
   type: string,
   [key: string]: unknown
 }
@@ -49,7 +51,20 @@ class TargetFeature implements vscodelc.StaticFeature {
       vscode.commands.registerCommand("neocmakelsp.cmakeTargets.refreshEntry", async () => {
         await this.refresh();
       }),
-      vscode.commands.registerCommand("neocmakelsp.cmakeTargets.run", async () => {
+      vscode.commands.registerCommand("neocmakelsp.cmakeTargets.run", (target: Target) => {
+        const len = vscode.workspace.workspaceFolders?.length;
+        if (len == undefined || len < 1) {
+          return;
+        }
+        if (target.info.artifacts.length == 0) {
+          return;
+        }
+        const forder = vscode.workspace.workspaceFolders![0];
+        const folder = forder.uri.fsPath;
+        const target_path = target.info.artifacts[0].path;
+        const bin_path = path.join(folder, "build", target_path);
+        childProcess.spawn(bin_path, []);
+
       }),
       vscode.commands.registerTextEditorCommand("neocmakelsp.cmakeTargets", async (_editor, _edit) => {
         await this.refresh();
