@@ -205,7 +205,7 @@
   "activationEvents": [
     "onLanguage:cmake"
   ],
-  "main": "./out/extension.js",
+  "main": "./dist/extension.js",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@jest/globals": "^30.4.1",
