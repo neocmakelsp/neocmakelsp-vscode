@@ -91,18 +91,26 @@ export class TargetsProvider implements vscode.TreeDataProvider<Target> {
     return Object.values(this.targets);
   }
 
-  getTreeItem(element: Target): vscode.TreeItem {
-    const item = new vscode.TreeItem(element.name);
-    if (element.info.type == "EXECUTABLE") {
-      item.contextValue = "executable"
-    } else {
-      item.contextValue = "library"
-    }
-    item.tooltip = `${element.name}-${element.build_type}`;
-    return item;
+  getTreeItem(element: Target): TargetItem {
+    return new TargetItem(element);
   }
 
   getParent(_element: Target): Target | undefined {
     return undefined;
+  }
+}
+
+class TargetItem extends vscode.TreeItem {
+  constructor(
+    public readonly element: Target,
+    public readonly collapsibleState?: vscode.TreeItemCollapsibleState
+  ) {
+    super(element.name, collapsibleState);
+    this.tooltip = `${element.name}-${element.build_type}`;
+    if (element.info.type == "EXECUTABLE") {
+      this.contextValue = "executable";
+    } else {
+      this.contextValue = "library";
+    }
   }
 }
