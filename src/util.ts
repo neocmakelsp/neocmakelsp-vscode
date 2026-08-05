@@ -33,15 +33,77 @@ function replacement(name: string): string | undefined {
   return undefined;
 }
 
-export function version_is_latest(tag_version: string, local_version: string): boolean {
-  const tag_v_list = tag_version.split('.');
-  const latest_v_list = local_version.split('.');
+export class Version {
+  readonly major: number;
+  readonly minor: number;
+  readonly patch: number;
 
-  const max_count = 3;
-  for (let index = 0; index < max_count; index++) {
-    if (tag_v_list[index] > latest_v_list[index]) {
+  static parse(version: string): Version | undefined {
+    const version_list = version.split('.');
+    if (version_list.length == 0) {
+      return;
+    }
+    const major = parseInt(version_list[0]);
+    if (Number.isNaN(major)) {
+      return;
+    }
+    let minor = 0;
+    let patch = 0;
+    if (version_list.length >= 2) {
+      minor = parseInt(version_list[1]);
+      if (Number.isNaN(minor)) {
+        return;
+      }
+    }
+    if (version_list.length >= 3) {
+      patch = parseInt(version_list[2]);
+      if (Number.isNaN(patch)) {
+        return;
+      }
+    }
+    return new Version(major, minor, patch);
+  }
+
+  constructor(major: number, minor: number, patch: number) {
+    this.major = major;
+    this.minor = minor;
+    this.patch = patch;
+  }
+
+  bigger(other: Version): boolean {
+    if (this.major > other.major) {
+      return true;
+    } else if (this.major < other.major) {
       return false;
     }
+    if (this.minor > other.minor) {
+      return true;
+    } else if (this.minor < other.minor) {
+      return false;
+    }
+    if (this.patch > other.patch) {
+      return true;
+    }
+    return false;
   }
-  return true;
+  smaller(other: Version): boolean {
+    if (this.major < other.major) {
+      return true;
+    } else if (this.major > other.major) {
+      return false;
+    }
+    if (this.minor < other.minor) {
+      return true;
+    } else if (this.minor > other.minor) {
+      return false;
+    }
+    if (this.patch < other.patch) {
+      return true;
+    }
+    return false;
+  }
+
+  equal(other: Version): boolean {
+    return this.patch == other.patch && this.minor == other.minor && this.major == other.major;
+  }
 }

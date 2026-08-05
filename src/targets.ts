@@ -2,11 +2,13 @@ import * as vscodelc from 'vscode-languageclient/node';
 import * as vscode from 'vscode';
 import { NeocmakeContext } from './extension';
 import * as path from 'path';
-
+import { Version } from './util';
 import * as childProcess from 'node:child_process';
 const TargetMethod = 'neocmake/cmake_targets';
 
 const TargetRequestType = new vscodelc.RequestType0<CMakeTargets | null, void>(TargetMethod);
+
+const TargetVersion = new Version(0, 11, 1);
 
 export type Target = {
   build_type: string;
@@ -30,8 +32,11 @@ export type CMakeTargets = {
 };
 
 export function activate(context: NeocmakeContext) {
-  const feature = new TargetFeature(context);
-  context.client.registerFeature(feature);
+  const clientVersion = context.client.initializeResult?.serverInfo?.version;
+  if (clientVersion != undefined && Version.parse(clientVersion)?.bigger(TargetVersion)) {
+    const feature = new TargetFeature(context);
+    context.client.registerFeature(feature);
+  }
 }
 
 class TargetFeature implements vscodelc.StaticFeature {

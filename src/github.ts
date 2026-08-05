@@ -1,6 +1,6 @@
 import which from 'which';
 import * as childProcess from 'node:child_process';
-import { version_is_latest } from './util';
+import { Version } from './util';
 
 const githubReleaseURL = 'https://api.github.com/repos/Decodetalkers/neocmakelsp/releases/latest';
 
@@ -23,14 +23,26 @@ export type AssetInfo = {
 };
 
 export async function isLatestRelease(path: string, abort: AbortController) {
-  const latestversion = await latestRelease(abort);
+  const latestReleaseInfo = await latestRelease(abort);
 
-  const version = await getNeocmakeVersion(path);
-  if (!version) {
+  const localVersionStr = await getNeocmakeVersion(path);
+  if (!localVersionStr) {
     return false;
   }
-  const tag_version = latestversion.tag_name.substring(1);
-  return version_is_latest(tag_version, version);
+  const tagVersionStr = latestReleaseInfo.tag_name.substring(1);
+  const localVersion = Version.parse(localVersionStr);
+  if (!localVersion) {
+    // NOTE: if local version is illegal
+    // Emm, what happened now
+    return false;
+  }
+  const tagVersion = Version.parse(tagVersionStr);
+  if (!tagVersion) {
+    // NOTE: if tagVersion is illegal, then do not download it
+    return true;
+  }
+  // NOTE: we need to make sure at least they are equal
+  return !localVersion.smaller(tagVersion)
 }
 
 export async function latestRelease(timeoutController: AbortController) {
