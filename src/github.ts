@@ -42,7 +42,7 @@ export async function isLatestRelease(path: string, abort: AbortController) {
     return true;
   }
   // NOTE: we need to make sure at least they are equal
-  return !localVersion.smaller(tagVersion)
+  return !localVersion.smaller(tagVersion);
 }
 
 export async function latestRelease(timeoutController: AbortController) {

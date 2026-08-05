@@ -10,7 +10,6 @@ describe('Extension Test Suite', () => {
     const path_result_normal = substitute<string>('/usr/bin/neocmakelsp');
     assert.equal(path_result_normal, '/usr/bin/neocmakelsp');
   });
-
 });
 
 describe('Version Test', () => {
