@@ -38,6 +38,7 @@ class TargetFeature implements vscodelc.StaticFeature {
   adapter: TargetsProvider;
   constructor(private context: NeocmakeContext) {
     const adapter = new TargetsProvider();
+    const OutputChannel = vscode.window.createOutputChannel("Neocmake output");
     const tree = vscode.window.createTreeView("neocmakelsp.cmakeTargets", { treeDataProvider: adapter });
     context.subscriptions.push(tree,
       adapter.onDidChangeTreeData((_) => {
@@ -51,7 +52,7 @@ class TargetFeature implements vscodelc.StaticFeature {
       vscode.commands.registerCommand("neocmakelsp.cmakeTargets.refreshEntry", async () => {
         await this.refresh();
       }),
-      vscode.commands.registerCommand("neocmakelsp.cmakeTargets.run", (target: Target) => {
+      vscode.commands.registerCommand("neocmakelsp.cmakeTargets.run", async (target: Target) => {
         const len = vscode.workspace.workspaceFolders?.length;
         if (len == undefined || len < 1) {
           return;
@@ -63,8 +64,18 @@ class TargetFeature implements vscodelc.StaticFeature {
         const folder = forder.uri.fsPath;
         const target_path = target.info.artifacts[0].path;
         const bin_path = path.join(folder, "build", target_path);
-        childProcess.spawn(bin_path, []);
-
+        const child = childProcess.spawn(bin_path, []);
+        const stdout = (async () => {
+          for await (const chunk of child.stdout) {
+            OutputChannel.appendLine(chunk);
+          }
+        })();
+        const stderr = (async () => {
+          for await (const chunk of child.stderr) {
+            OutputChannel.appendLine(chunk);
+          }
+        })();
+        await Promise.all([stderr, stdout]);
       }),
       vscode.commands.registerTextEditorCommand("neocmakelsp.cmakeTargets", async (_editor, _edit) => {
         await this.refresh();
