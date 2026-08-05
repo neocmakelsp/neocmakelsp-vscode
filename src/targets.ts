@@ -8,7 +8,7 @@ const TargetMethod = 'neocmake/cmake_targets';
 
 const TargetRequestType = new vscodelc.RequestType0<CMakeTargets | null, void>(TargetMethod);
 
-const TargetVersion = new Version(0, 11, 1);
+const TargetVersion = new Version(0, 11, 0);
 
 export type Target = {
   build_type: string;
@@ -32,11 +32,14 @@ export type CMakeTargets = {
 };
 
 export function activate(context: NeocmakeContext) {
-  const clientVersion = context.client.initializeResult?.serverInfo?.version;
-  if (clientVersion != undefined && Version.parse(clientVersion)?.bigger(TargetVersion)) {
-    const feature = new TargetFeature(context);
-    context.client.registerFeature(feature);
-  }
+  context.onDidFinish(async () => {
+    const clientVersion = context.client.initializeResult?.serverInfo?.version;
+    if (clientVersion != undefined && Version.parse(clientVersion)?.bigger(TargetVersion)) {
+      const feature = new TargetFeature(context);
+      context.client.registerFeature(feature);
+      await feature.refresh();
+    }
+  });
 }
 
 class TargetFeature implements vscodelc.StaticFeature {
@@ -54,9 +57,6 @@ class TargetFeature implements vscodelc.StaticFeature {
         vscode.commands.executeCommand('setContext', 'neocmakelsp.cmakeTargets.hasData', true);
         // @ts-ignore
         tree.reveal(null);
-      }),
-      context.onDidFinish(async () => {
-        await this.refresh();
       }),
       vscode.commands.registerCommand('neocmakelsp.cmakeTargets.refreshEntry', async () => {
         await this.refresh();

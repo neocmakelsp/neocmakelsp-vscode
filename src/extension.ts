@@ -130,12 +130,12 @@ export class NeocmakeContext implements vscode.Disposable {
     this.subscriptions = subscriptions;
     this.client = client;
     this.startClient();
-    this._onDidFinish.fire();
   }
 
   async startClient() {
     targets.activate(this);
-    this.client.start();
+    await this.client.start();
+    this._onDidFinish.fire();
   }
 
   dispose() {

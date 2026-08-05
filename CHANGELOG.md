@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-08-05
+
+### Fixed
+
+- The problem in 0.1.0, the version check is failed. We should wait for lsp ready, then check the version
+
+[0.1.1]: https://github.com/neocmakelsp/neocmakelsp-vscode/compare/v0.1.0...v0.1.1
+
 ## [0.1.0] - 2026-08-05
 
 ### Changed

@@ -33,6 +33,7 @@ jobs:
   release:
     permissions:
       contents: write
+      id-token: write
 
     if: startsWith(github.ref, 'refs/tags/v')
     needs:
@@ -54,6 +55,11 @@ jobs:
       - run: corepack pnpm build
       - run: corepack pnpm ovsx publish -p ${{ secrets.OVSX_TOKEN }} --no-dependencies
       - run: corepack pnpm vsce publish -p ${{ secrets.VSCE_TOKEN }} --no-dependencies
-      - uses: softprops/action-gh-release@v3
-        with:
-          draft: true
+      - name: Publish github release
+        run: |
+          if [[ $(echo "${GTIHUB_REF#refs/tags/v}" | grep '-' > /dev/null) ]]; then
+            gh release edit "${GITHUB_REF#refs/tags/}" --prerelease
+          fi
+          gh release edit "${GITHUB_REF#refs/tags/}" --draft=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
