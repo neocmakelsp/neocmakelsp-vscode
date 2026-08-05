@@ -1,16 +1,14 @@
-import * as vscode from "vscode";
-import * as fs from "node:fs";
-import * as stream from "node:stream";
-import * as unzipper from "unzipper";
+import * as vscode from 'vscode';
+import * as fs from 'node:fs';
+import * as stream from 'node:stream';
+import * as unzipper from 'unzipper';
 
-import path from "node:path";
-import { promisify } from "node:util";
-import * as tar from "tar";
-import * as Github from "./github";
+import path from 'node:path';
+import { promisify } from 'node:util';
+import * as tar from 'tar';
+import * as Github from './github';
 
-type DownloadProgress = vscode.Progress<
-  { message?: string; increment?: number }
->;
+type DownloadProgress = vscode.Progress<{ message?: string; increment?: number }>;
 
 async function download(
   progress: DownloadProgress,
@@ -20,7 +18,7 @@ async function download(
   untarFile: string,
   file_type: Github.FILE_TYPE,
   targetFile: string,
-  abort: AbortController,
+  abort: AbortController
 ) {
   token.onCancellationRequested(() => abort.abort());
   const response = await fetch(url, { signal: abort.signal });
@@ -28,11 +26,9 @@ async function download(
     throw new Error(`failed to download ${url}`);
   }
 
-  const totalSize = parseInt(response.headers.get("content-length")!, 10); // Get total size in bytes
+  const totalSize = parseInt(response.headers.get('content-length')!, 10); // Get total size in bytes
   if (!totalSize) {
-    vscode.window.showErrorMessage(
-      "No content-length header, cannot track progress",
-    );
+    vscode.window.showErrorMessage('No content-length header, cannot track progress');
   }
 
   let downloadedSize = 0;
@@ -56,28 +52,26 @@ async function download(
     },
   });
   const out = fs.createWriteStream(untarFile);
-  await promisify(stream.pipeline)(response.body!, progressStream, out).catch(
-    (e) => {
-      fs.unlink(untarFile, (_) => null);
-      throw e;
-    },
-  );
-  if (file_type === "tar") {
+  await promisify(stream.pipeline)(response.body!, progressStream, out).catch(e => {
+    fs.unlink(untarFile, _ => null);
+    throw e;
+  });
+  if (file_type === 'tar') {
     await tar.x({ file: untarFile, C: storagePath });
   } else {
     const directory = await unzipper.Open.file(untarFile);
     if (directory.files.length === 0) {
-      throw new Error("No file");
+      throw new Error('No file');
     }
-    directory.files[0].stream().pipe(fs.createWriteStream(targetFile)).on(
-      "error",
-      (e) => {
-        fs.unlink(untarFile, (_) => null);
+    directory.files[0]
+      .stream()
+      .pipe(fs.createWriteStream(targetFile))
+      .on('error', e => {
+        fs.unlink(untarFile, _ => null);
         throw e;
-      },
-    )
-      .on("finish", () => {
-        fs.unlink(untarFile, (_) => null);
+      })
+      .on('finish', () => {
+        fs.unlink(untarFile, _ => null);
       });
   }
 }
@@ -85,7 +79,7 @@ async function download(
 export async function install(
   assert_info: Github.AssetInfo,
   abort: AbortController,
-  storagePath: string,
+  storagePath: string
 ): Promise<string | undefined> {
   if (await promisify(fs.exists)(storagePath)) {
     const neocmakeExecutableName = assert_info.runtime;
@@ -101,7 +95,7 @@ export async function install(
     await vscode.window.withProgress(
       {
         location: vscode.ProgressLocation.Notification,
-        title: "Downloading new neocmakelsp",
+        title: 'Downloading new neocmakelsp',
         cancellable: true,
       },
       async (progress, token) => {
@@ -113,9 +107,9 @@ export async function install(
           downloadPath,
           assert_info.type,
           neocmakelspPath,
-          abort,
+          abort
         );
-      },
+      }
     );
   } catch (_) {
     return undefined;

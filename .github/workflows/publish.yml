@@ -27,6 +27,7 @@ jobs:
           runtime: node@22
           cache: true
       - run: corepack pnpm install
+      - run: corepack pnpm fmt:check
       - run: corepack pnpm test
 
   release:

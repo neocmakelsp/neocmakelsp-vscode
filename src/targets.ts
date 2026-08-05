@@ -1,33 +1,33 @@
 import * as vscodelc from 'vscode-languageclient/node';
 import * as vscode from 'vscode';
 import { NeocmakeContext } from './extension';
-import * as path from "path";
+import * as path from 'path';
 
-import * as childProcess from "node:child_process";
-const TargetMethod = "neocmake/cmake_targets";
+import * as childProcess from 'node:child_process';
+const TargetMethod = 'neocmake/cmake_targets';
 
 const TargetRequestType = new vscodelc.RequestType0<CMakeTargets | null, void>(TargetMethod);
 
 export type Target = {
-  build_type: string,
-  name: string,
-  info: TargetInfo
-}
+  build_type: string;
+  name: string;
+  info: TargetInfo;
+};
 
 export type TargetInfo = {
-  artifacts: Artifact[],
-  type: string,
-  [key: string]: unknown
-}
+  artifacts: Artifact[];
+  type: string;
+  [key: string]: unknown;
+};
 
 export type Artifact = {
-  path: string,
-  [key: string]: unknown
-}
+  path: string;
+  [key: string]: unknown;
+};
 
 export type CMakeTargets = {
-  [key: string]: Target
-}
+  [key: string]: Target;
+};
 
 export function activate(context: NeocmakeContext) {
   const feature = new TargetFeature(context);
@@ -38,10 +38,14 @@ class TargetFeature implements vscodelc.StaticFeature {
   adapter: TargetsProvider;
   constructor(private context: NeocmakeContext) {
     const adapter = new TargetsProvider();
-    const OutputChannel = vscode.window.createOutputChannel("Neocmake output");
-    const tree = vscode.window.createTreeView("neocmakelsp.cmakeTargets", { treeDataProvider: adapter });
-    context.subscriptions.push(tree,
-      adapter.onDidChangeTreeData((_) => {
+    const runChannel = vscode.window.createOutputChannel('Neocmake run');
+    const buildChannel = vscode.window.createOutputChannel('Neocmake build');
+    const tree = vscode.window.createTreeView('neocmakelsp.cmakeTargets', {
+      treeDataProvider: adapter,
+    });
+    context.subscriptions.push(
+      tree,
+      adapter.onDidChangeTreeData(_ => {
         vscode.commands.executeCommand('setContext', 'neocmakelsp.cmakeTargets.hasData', true);
         // @ts-ignore
         tree.reveal(null);
@@ -49,10 +53,10 @@ class TargetFeature implements vscodelc.StaticFeature {
       context.onDidFinish(async () => {
         await this.refresh();
       }),
-      vscode.commands.registerCommand("neocmakelsp.cmakeTargets.refreshEntry", async () => {
+      vscode.commands.registerCommand('neocmakelsp.cmakeTargets.refreshEntry', async () => {
         await this.refresh();
       }),
-      vscode.commands.registerCommand("neocmakelsp.cmakeTargets.run", async (target: Target) => {
+      vscode.commands.registerCommand('neocmakelsp.cmakeTargets.build', async (target: Target) => {
         const len = vscode.workspace.workspaceFolders?.length;
         if (len == undefined || len < 1) {
           return;
@@ -60,26 +64,64 @@ class TargetFeature implements vscodelc.StaticFeature {
         if (target.info.artifacts.length == 0) {
           return;
         }
+        buildChannel.show(true);
         const forder = vscode.workspace.workspaceFolders![0];
         const folder = forder.uri.fsPath;
-        const target_path = target.info.artifacts[0].path;
-        const bin_path = path.join(folder, "build", target_path);
-        const child = childProcess.spawn(bin_path, []);
+        const target_name = target.name;
+        const child = childProcess.exec(`cmake --build build --target ${target_name}`, {
+          cwd: folder,
+        });
         const stdout = (async () => {
+          if (child.stdout == null) {
+            return;
+          }
           for await (const chunk of child.stdout) {
-            OutputChannel.appendLine(chunk);
+            buildChannel.appendLine(chunk);
           }
         })();
         const stderr = (async () => {
+          if (child.stderr == null) {
+            return;
+          }
           for await (const chunk of child.stderr) {
-            OutputChannel.appendLine(chunk);
+            buildChannel.appendLine(chunk);
           }
         })();
         await Promise.all([stderr, stdout]);
       }),
-      vscode.commands.registerTextEditorCommand("neocmakelsp.cmakeTargets", async (_editor, _edit) => {
-        await this.refresh();
-      })
+      vscode.commands.registerCommand('neocmakelsp.cmakeTargets.run', async (target: Target) => {
+        const len = vscode.workspace.workspaceFolders?.length;
+        if (len == undefined || len < 1) {
+          return;
+        }
+        if (target.info.artifacts.length == 0) {
+          return;
+        }
+        runChannel.show(true);
+        const forder = vscode.workspace.workspaceFolders![0];
+        const folder = forder.uri.fsPath;
+        const target_path = target.info.artifacts[0].path;
+        const bin_path = path.join(folder, 'build', target_path);
+        const child = childProcess.spawn(bin_path, []);
+        const stdout = (async () => {
+          for await (const chunk of child.stdout) {
+            runChannel.appendLine(chunk);
+          }
+        })();
+        const stderr = (async () => {
+          for await (const chunk of child.stderr) {
+            runChannel.appendLine(chunk);
+          }
+        })();
+        await Promise.all([stderr, stdout]);
+      }),
+
+      vscode.commands.registerTextEditorCommand(
+        'neocmakelsp.cmakeTargets',
+        async (_editor, _edit) => {
+          await this.refresh();
+        }
+      )
     );
     this.adapter = adapter;
   }
@@ -87,17 +129,14 @@ class TargetFeature implements vscodelc.StaticFeature {
     const item = await this.context.client.sendRequest(TargetRequestType);
     this.adapter.setTargets(item);
   }
-  initialize(_capabilities: vscodelc.ServerCapabilities, _documentSelector: vscodelc.DocumentSelector | undefined): void {
-
-  }
-  fillClientCapabilities(_capabilities: vscodelc.ClientCapabilities): void {
-
-  }
-  clear(): void {
-
-  }
+  initialize(
+    _capabilities: vscodelc.ServerCapabilities,
+    _documentSelector: vscodelc.DocumentSelector | undefined
+  ): void {}
+  fillClientCapabilities(_capabilities: vscodelc.ClientCapabilities): void {}
+  clear(): void {}
   getState(): vscodelc.FeatureState {
-    return { kind: "static" };
+    return { kind: 'static' };
   }
 }
 
@@ -133,10 +172,10 @@ class TargetItem extends vscode.TreeItem {
   ) {
     super(element.name, collapsibleState);
     this.tooltip = `${element.name}-${element.build_type}`;
-    if (element.info.type == "EXECUTABLE") {
-      this.contextValue = "executable";
+    if (element.info.type == 'EXECUTABLE') {
+      this.contextValue = 'executable';
     } else {
-      this.contextValue = "library";
+      this.contextValue = 'library';
     }
   }
 }

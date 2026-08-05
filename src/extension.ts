@@ -1,70 +1,58 @@
-import { type ExtensionContext, workspace } from "vscode";
-import * as vscode from "vscode";
-import * as targets from "./targets";
+import { type ExtensionContext, workspace } from 'vscode';
+import * as vscode from 'vscode';
+import * as targets from './targets';
 
-import * as os from "node:os";
+import * as os from 'node:os';
 
 import {
   LanguageClient,
   type LanguageClientOptions,
   type ServerOptions,
-} from "vscode-languageclient/node";
-import { get } from "./config";
-import {
-  CMakeDebugAdapterDescriptorFactory,
-  getDebuggerPipeName,
-} from "./debug";
-import type { SourceFileNode } from "./outlines";
-import { installLatestNeocmakeLsp } from "./install";
+} from 'vscode-languageclient/node';
+import { get } from './config';
+import { CMakeDebugAdapterDescriptorFactory, getDebuggerPipeName } from './debug';
+import type { SourceFileNode } from './outlines';
+import { installLatestNeocmakeLsp } from './install';
 
 const platform = os.platform();
 
 function setupDebug(subscriptions: vscode.Disposable[]) {
   subscriptions.push(
     vscode.debug.registerDebugAdapterDescriptorFactory(
-      "cmake",
-      new CMakeDebugAdapterDescriptorFactory(),
-    ),
+      'cmake',
+      new CMakeDebugAdapterDescriptorFactory()
+    )
   );
-  vscode.commands.registerCommand("neocmakelsp.runScriptDebugger", () => {
+  vscode.commands.registerCommand('neocmakelsp.runScriptDebugger', () => {
     return vscode.debug.startDebugging(undefined, {
-      name: "CMake debugger",
-      request: "launch",
-      type: "cmake",
-      cmakeDebugType: "script",
+      name: 'CMake debugger',
+      request: 'launch',
+      type: 'cmake',
+      cmakeDebugType: 'script',
       scriptPath: vscode.window.activeTextEditor!.document.uri.fsPath,
       pipeName: getDebuggerPipeName(),
     });
   });
-  vscode.commands.registerCommand(
-    "neocmakelsp.outline.runScriptDebugger",
+  (vscode.commands.registerCommand(
+    'neocmakelsp.outline.runScriptDebugger',
     (what: SourceFileNode) => {
-      return vscode.commands.executeCommand(
-        "neocmakelsp.runScriptDebugger",
-        what.sourcePath,
-      );
-    },
+      return vscode.commands.executeCommand('neocmakelsp.runScriptDebugger', what.sourcePath);
+    }
   ),
-    vscode.commands.registerCommand(
-      "neocmakelsp.runConfigureDebugger",
-      () => {
-        return vscode.debug.startDebugging(undefined, {
-          name: "CMake debugger",
-          request: "launch",
-          type: "cmake",
-          pipeName: getDebuggerPipeName(),
-          cmakeDebugType: "configure",
-        });
-      },
-    );
+    vscode.commands.registerCommand('neocmakelsp.runConfigureDebugger', () => {
+      return vscode.debug.startDebugging(undefined, {
+        name: 'CMake debugger',
+        request: 'launch',
+        type: 'cmake',
+        pipeName: getDebuggerPipeName(),
+        cmakeDebugType: 'configure',
+      });
+    }));
   vscode.commands.registerCommand(
-    "neocmakelsp.outline.runConfigureDebugger",
+    'neocmakelsp.outline.runConfigureDebugger',
     (what: SourceFileNode) => {
-      return vscode.commands.executeCommand(
-        "neocmakelsp.runConfigureDebugger",
-        what.sourcePath,
-      );
-    },
+      return vscode.commands.executeCommand('neocmakelsp.runConfigureDebugger', what.sourcePath);
+    }
   );
 }
 
@@ -74,32 +62,30 @@ export class NeocmakeContext implements vscode.Disposable {
 
   private _onDidFinish = new vscode.EventEmitter<void>();
   readonly onDidFinish: vscode.Event<void> = this._onDidFinish.event;
-  static async create(
-    context: ExtensionContext
-  ): Promise<NeocmakeContext> {
+  static async create(context: ExtensionContext): Promise<NeocmakeContext> {
     const subscriptions: vscode.Disposable[] = [];
-    if (get<boolean>("debug")) {
+    if (get<boolean>('debug')) {
       setupDebug(subscriptions);
     }
 
     let neocmakelspExecutable = undefined;
 
-    const tcp = get<boolean>("tcp");
+    const tcp = get<boolean>('tcp');
 
-    const localtarget = get<boolean>("localtarget");
-    const lsp_snippets = get<boolean>("lsp_snippets");
+    const localtarget = get<boolean>('localtarget');
+    const lsp_snippets = get<boolean>('lsp_snippets');
 
-    let ncCommand = "nc";
-    if (platform === "win32") {
-      ncCommand = "ncat";
+    let ncCommand = 'nc';
+    if (platform === 'win32') {
+      ncCommand = 'ncat';
     }
     if (tcp === true) {
       neocmakelspExecutable = {
         command: ncCommand,
-        args: ["localhost", "9257"],
+        args: ['localhost', '9257'],
       };
     } else {
-      let realPath = get<string>("path");
+      let realPath = get<string>('path');
       if (localtarget !== true) {
         const exPath = context.extensionPath;
 
@@ -113,7 +99,7 @@ export class NeocmakeContext implements vscode.Disposable {
       // Otherwise the run options are used
       neocmakelspExecutable = {
         command: realPath!,
-        args: ["stdio"],
+        args: ['stdio'],
       };
     }
     const serverOptions: ServerOptions = {
@@ -124,10 +110,10 @@ export class NeocmakeContext implements vscode.Disposable {
     // Options to control the language client
     const clientOptions: LanguageClientOptions = {
       // Register the server for plain text documents
-      documentSelector: [{ scheme: "file", language: "cmake" }],
+      documentSelector: [{ scheme: 'file', language: 'cmake' }],
       synchronize: {
         // Notify the server about file changes to '.clientrc files contained in the workspace
-        fileEvents: workspace.createFileSystemWatcher("**/CMakeCache.txt"),
+        fileEvents: workspace.createFileSystemWatcher('**/CMakeCache.txt'),
       },
       initializationOptions: {
         semantic_token: true,
@@ -136,12 +122,7 @@ export class NeocmakeContext implements vscode.Disposable {
     };
 
     // Create the language client and start the client.
-    const client = new LanguageClient(
-      "neocmakelsp",
-      "neocmakelsp",
-      serverOptions,
-      clientOptions,
-    );
+    const client = new LanguageClient('neocmakelsp', 'neocmakelsp', serverOptions, clientOptions);
     return new NeocmakeContext(subscriptions, client);
   }
 
@@ -158,7 +139,9 @@ export class NeocmakeContext implements vscode.Disposable {
   }
 
   dispose() {
-    this.subscriptions.forEach((d) => { d.dispose(); });
+    this.subscriptions.forEach(d => {
+      d.dispose();
+    });
     if (this.client) {
       this.client.stop();
     }
