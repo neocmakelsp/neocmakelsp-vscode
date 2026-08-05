@@ -1,4 +1,4 @@
-import type * as vscode from "vscode";
+import type * as vscode from 'vscode';
 export type SourceFileNode = {
   folder?: vscode.WorkspaceFolder;
   sourcePath: vscode.Uri;

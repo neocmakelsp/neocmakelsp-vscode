@@ -143,18 +143,6 @@
         ]
       }
     ],
-    "menus": {
-      "commandPalette": [
-        {
-          "command": "neocmakelsp.outline.runScriptDebugger",
-          "when": "neocmakelsp.debug == true"
-        },
-        {
-          "command": "neocmakelsp.outline.runConfigureDebugger",
-          "when": "neocmakelsp.debug == true"
-        }
-      ]
-    },
     "commands": [
       {
         "command": "neocmakelsp.runScriptDebugger",
@@ -179,8 +167,71 @@
         "title": "debug current cmake workspace",
         "categories": "CMake",
         "when": "neocmakelsp.debug == true"
+      },
+      {
+        "command": "neocmakelsp.cmakeTargets",
+        "categories": "CMake",
+        "title": "CMake targets",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "neocmakelsp.cmakeTargets.refreshEntry",
+        "categories": "CMake",
+        "title": "refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "neocmakelsp.cmakeTargets.run",
+        "categories": "CMake",
+        "title": "run",
+        "icon": "$(run)"
+      },
+      {
+        "command": "neocmakelsp.cmakeTargets.build",
+        "categories": "CMake",
+        "title": "build",
+        "icon": "$(build)"
       }
     ],
+    "views": {
+      "explorer": [
+        {
+          "id": "neocmakelsp.cmakeTargets",
+          "name": "CMake Targets"
+        }
+      ]
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "neocmakelsp.outline.runScriptDebugger",
+          "when": "neocmakelsp.debug == true"
+        },
+        {
+          "command": "neocmakelsp.outline.runConfigureDebugger",
+          "when": "neocmakelsp.debug == true"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "neocmakelsp.cmakeTargets.refreshEntry",
+          "when": "view == neocmakelsp.cmakeTargets",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "neocmakelsp.cmakeTargets.run",
+          "when": "view == neocmakelsp.cmakeTargets && viewItem == executable",
+          "group": "inline"
+        },
+        {
+          "command": "neocmakelsp.cmakeTargets.build",
+          "when": "view == neocmakelsp.cmakeTargets",
+          "group": "inline"
+        }
+      ]
+    },
     "grammars": [
       {
         "language": "cmake",
@@ -223,6 +274,7 @@
     "eslint": "^10.5.0",
     "jest": "^30.4.2",
     "ovsx": "^1.0.2",
+    "prettier": "^3.9.6",
     "ts-jest": "^29.4.12",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.1"
@@ -242,6 +294,8 @@
     "check-types": "tsc --noEmit",
     "lint": "eslint src",
     "test": "jest",
+    "fmt": "prettier --write src/",
+    "fmt:check": "prettier --check src/",
     "vscode-test": "vscode-test"
   }
 }
