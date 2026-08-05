@@ -282,7 +282,7 @@
   "scripts": {
     "build": "pnpm vsce package --no-dependencies",
     "publish": "pnpm vsce publish --no-dependencies",
-    "publish-openvsx": "pnpm ovsx publish",
+    "publish-openvsx": "pnpm ovsx publish --no-dependencies",
     "vscode:prepublish": "pnpm run package",
     "compile": "pnpm run check-types && pnpm run lint && node esbuild.js",
     "watch:esbuild": "node esbuild.js --watch",
