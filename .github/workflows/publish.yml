@@ -52,8 +52,8 @@ jobs:
           cache: true
       - run: corepack pnpm install
       - run: corepack pnpm build
-      - run: corepack pnpm ovsx publish -p ${{ secrets.OVSX_TOKEN }}
-      - run: corepack pnpm vsce publish -p ${{ secrets.VSCE_TOKEN }}
+      - run: corepack pnpm ovsx publish -p ${{ secrets.OVSX_TOKEN }} --no-dependencies
+      - run: corepack pnpm vsce publish -p ${{ secrets.VSCE_TOKEN }} --no-dependencies
       - uses: softprops/action-gh-release@v3
         with:
           draft: true
