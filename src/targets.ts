@@ -35,6 +35,7 @@ export function activate(context: NeocmakeContext) {
   context.onDidFinish(async () => {
     const clientVersion = context.client.initializeResult?.serverInfo?.version;
     if (clientVersion != undefined && Version.parse(clientVersion)?.bigger(TargetVersion)) {
+      vscode.commands.executeCommand('setContext', 'neocmakelsp.cmakeTargets.Support', true);
       const feature = new TargetFeature(context);
       context.client.registerFeature(feature);
       await feature.refresh();
@@ -58,9 +59,11 @@ class TargetFeature implements vscodelc.StaticFeature {
         // @ts-ignore
         tree.reveal(null);
       }),
+
       vscode.commands.registerCommand('neocmakelsp.cmakeTargets.refreshEntry', async () => {
         await this.refresh();
       }),
+
       vscode.commands.registerCommand('neocmakelsp.cmakeTargets.build', async (target: Target) => {
         const len = vscode.workspace.workspaceFolders?.length;
         if (len == undefined || len < 1) {

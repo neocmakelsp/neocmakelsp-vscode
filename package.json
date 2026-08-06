@@ -198,7 +198,8 @@
       "explorer": [
         {
           "id": "neocmakelsp.cmakeTargets",
-          "name": "CMake Targets"
+          "name": "CMake Targets",
+          "when": "neocmakelsp.cmakeTargets.Support"
         }
       ]
     },
