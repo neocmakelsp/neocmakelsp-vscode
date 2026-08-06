@@ -62,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix download problem after 0.9.0 has been published
 
-[0.0.28]: https://github.com/neocmakelsp/neocmakelsp-vscode/compare/v0.0.27...v0.0.26
+[0.0.27]: https://github.com/neocmakelsp/neocmakelsp-vscode/compare/v0.0.27...v0.0.26
 
 ## [0.0.23] - 2025-10-01
 
