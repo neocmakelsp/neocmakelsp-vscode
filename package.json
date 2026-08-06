@@ -1,6 +1,7 @@
 {
   "name": "neocmakelsp-vscode",
-  "description": "vscode extension for neocmakelsp",
+  "displayName": "neocmakelsp: CMake Tools",
+  "description": "A CMake language support for Visual Studio Code, powered by neocmakelsp",
   "author": "Decodetalkers",
   "license": "MIT",
   "version": "0.1.1",
