@@ -56,6 +56,12 @@ jobs:
       - run: corepack pnpm build
       - run: corepack pnpm ovsx publish -p ${{ secrets.OVSX_TOKEN }} --no-dependencies
       - run: corepack pnpm vsce publish -p ${{ secrets.VSCE_TOKEN }} --no-dependencies
+      - uses: taiki-e/create-gh-release-action@eba8ea96c86cca8a37f1b56e94b4d13301fba651 # v1.11.0
+        with:
+            branch: main
+            changelog: CHANGELOG.md
+            draft: true
+            token: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish github release
         run: |
           if [[ $(echo "${GTIHUB_REF#refs/tags/v}" | grep '-' > /dev/null) ]]; then
