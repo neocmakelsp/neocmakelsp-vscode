@@ -1,6 +1,6 @@
 {
   "name": "neocmakelsp-vscode",
-  "displayName": "neocmakelsp: CMake Tools",
+  "displayName": "neocmakelsp: CMake Helper",
   "description": "A CMake language support for Visual Studio Code, powered by neocmakelsp",
   "author": "Decodetalkers",
   "license": "MIT",
