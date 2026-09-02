@@ -261,7 +261,7 @@
   "main": "./dist/extension.js",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@jest/globals": "^30.4.1",
+    "@jest/globals": "^30.5.0",
     "@types/jest": "^29.5.14",
     "@types/mocha": "^10.0.10",
     "@types/node": "24.x",
