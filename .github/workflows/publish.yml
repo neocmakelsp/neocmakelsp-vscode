@@ -56,7 +56,7 @@ jobs:
       - run: corepack pnpm build
       - run: corepack pnpm ovsx publish -p ${{ secrets.OVSX_TOKEN }} --no-dependencies
       - run: corepack pnpm vsce publish -p ${{ secrets.VSCE_TOKEN }} --no-dependencies
-      - uses: taiki-e/create-gh-release-action@eba8ea96c86cca8a37f1b56e94b4d13301fba651 # v1.11.0
+      - uses: taiki-e/create-gh-release-action@045e5c0ed9c50cc1f96de7e891a09ad3daea245f # v1.12.0
         with:
             branch: main
             changelog: CHANGELOG.md
