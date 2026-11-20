@@ -28,6 +28,25 @@ download asserts from github, you can set them like
 
 NOTE: this feature only enable on unix system which has `nc` command.
 
+## Debugging
+
+The CMake debugger is contributed as `neocmakelsp-cmake`, separate from the `cmake`
+debugger type used by Microsoft's CMake Tools extension, so both extensions can be
+enabled together.
+
+Set `neocmakelsp.debug` to `true` to show the neocmakelsp debug commands:
+
+```json
+{
+  "neocmakelsp.debug": true
+}
+```
+
+You can also use `"type": "neocmakelsp-cmake"` in `launch.json`. If an existing
+configuration uses `"type": "cmake"` for this debugger, change it to
+`"type": "neocmakelsp-cmake"`; the `cmake` type belongs to Microsoft's CMake Tools
+extension.
+
 ## Feature show
 
 ### highlight
