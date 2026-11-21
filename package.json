@@ -43,7 +43,7 @@
         "neocmakelsp.debug": {
           "type": "boolean",
           "default": false,
-          "description": "enable the debug feature"
+          "description": "show the neocmakelsp debug commands"
         },
         "neocmakelsp.lsp_snippets": {
           "type": "boolean",
@@ -82,8 +82,8 @@
     ],
     "debuggers": [
       {
-        "type": "cmake",
-        "label": "CMake",
+        "type": "neocmakelsp-cmake",
+        "label": "neocmakelsp CMake",
         "languages": [
           "cmake"
         ],
@@ -113,7 +113,7 @@
         },
         "initialConfigurations": [
           {
-            "type": "cmake",
+            "type": "neocmakelsp-cmake",
             "request": "launch",
             "name": "configure",
             "cmakeDebugType": "configure"
@@ -124,7 +124,7 @@
             "label": "cmake project launch",
             "description": "debug when configure the project",
             "body": {
-              "type": "cmake",
+              "type": "neocmakelsp-cmake",
               "request": "launch",
               "name": "project debug",
               "cmakeDebugType": "configure"
@@ -134,7 +134,7 @@
             "label": "cmake script debug launch",
             "description": "debug a single cmake file",
             "body": {
-              "type": "cmake",
+              "type": "neocmakelsp-cmake",
               "request": "launch",
               "name": "script debug",
               "cmakeDebugType": "script",
@@ -148,26 +148,22 @@
       {
         "command": "neocmakelsp.runScriptDebugger",
         "title": "debug current cmake script",
-        "categories": "CMake",
-        "when": "neocmakelsp.debug == true"
+        "categories": "CMake"
       },
       {
         "command": "neocmakelsp.outline.runScriptDebugger",
         "title": "debug current cmake script",
-        "categories": "CMake",
-        "when": "neocmakelsp.debug == true"
+        "categories": "CMake"
       },
       {
         "command": "neocmakelsp.runConfigureDebugger",
         "title": "debug current cmake workspace",
-        "categories": "CMake",
-        "when": "neocmakelsp.debug == true"
+        "categories": "CMake"
       },
       {
         "command": "neocmakelsp.outline.runConfigureDebugger",
         "title": "debug current cmake workspace",
-        "categories": "CMake",
-        "when": "neocmakelsp.debug == true"
+        "categories": "CMake"
       },
       {
         "command": "neocmakelsp.cmakeTargets",
@@ -206,12 +202,20 @@
     "menus": {
       "commandPalette": [
         {
+          "command": "neocmakelsp.runScriptDebugger",
+          "when": "config.neocmakelsp.debug"
+        },
+        {
+          "command": "neocmakelsp.runConfigureDebugger",
+          "when": "config.neocmakelsp.debug"
+        },
+        {
           "command": "neocmakelsp.outline.runScriptDebugger",
-          "when": "neocmakelsp.debug == true"
+          "when": "config.neocmakelsp.debug"
         },
         {
           "command": "neocmakelsp.outline.runConfigureDebugger",
-          "when": "neocmakelsp.debug == true"
+          "when": "config.neocmakelsp.debug"
         }
       ],
       "view/title": [
@@ -256,7 +260,8 @@
     "which": "^7.0.0"
   },
   "activationEvents": [
-    "onLanguage:cmake"
+    "onLanguage:cmake",
+    "onDebugResolve:neocmakelsp-cmake"
   ],
   "main": "./dist/extension.js",
   "devDependencies": {

@@ -11,6 +11,7 @@ import {
 } from 'vscode-languageclient/node';
 import { get } from './config';
 import { CMakeDebugAdapterDescriptorFactory, getDebuggerPipeName } from './debug';
+import { DEBUG_TYPE } from './debugType';
 import type { SourceFileNode } from './outlines';
 import { installLatestNeocmakeLsp } from './install';
 
@@ -19,40 +20,59 @@ const platform = os.platform();
 function setupDebug(subscriptions: vscode.Disposable[]) {
   subscriptions.push(
     vscode.debug.registerDebugAdapterDescriptorFactory(
-      'cmake',
+      DEBUG_TYPE,
       new CMakeDebugAdapterDescriptorFactory()
     )
   );
-  vscode.commands.registerCommand('neocmakelsp.runScriptDebugger', () => {
-    return vscode.debug.startDebugging(undefined, {
-      name: 'CMake debugger',
-      request: 'launch',
-      type: 'cmake',
-      cmakeDebugType: 'script',
-      scriptPath: vscode.window.activeTextEditor!.document.uri.fsPath,
-      pipeName: getDebuggerPipeName(),
-    });
-  });
-  (vscode.commands.registerCommand(
-    'neocmakelsp.outline.runScriptDebugger',
-    (what: SourceFileNode) => {
-      return vscode.commands.executeCommand('neocmakelsp.runScriptDebugger', what.sourcePath);
-    }
-  ),
+
+  subscriptions.push(
+    vscode.commands.registerCommand('neocmakelsp.runScriptDebugger', (scriptPath?: string) => {
+      const path = scriptPath ?? vscode.window.activeTextEditor?.document.uri.fsPath;
+      if (path === undefined) {
+        void vscode.window.showErrorMessage(
+          'Open a CMake script or select one in the Outline view before starting the debugger.'
+        );
+        return false;
+      }
+      return vscode.debug.startDebugging(undefined, {
+        name: 'neocmakelsp CMake script',
+        request: 'launch',
+        type: DEBUG_TYPE,
+        cmakeDebugType: 'script',
+        scriptPath: path,
+        pipeName: getDebuggerPipeName(),
+      });
+    })
+  );
+
+  subscriptions.push(
+    vscode.commands.registerCommand(
+      'neocmakelsp.outline.runScriptDebugger',
+      (what?: SourceFileNode) => {
+        return vscode.commands.executeCommand(
+          'neocmakelsp.runScriptDebugger',
+          what?.sourcePath.fsPath
+        );
+      }
+    )
+  );
+
+  subscriptions.push(
     vscode.commands.registerCommand('neocmakelsp.runConfigureDebugger', () => {
       return vscode.debug.startDebugging(undefined, {
-        name: 'CMake debugger',
+        name: 'neocmakelsp CMake configure',
         request: 'launch',
-        type: 'cmake',
+        type: DEBUG_TYPE,
         pipeName: getDebuggerPipeName(),
         cmakeDebugType: 'configure',
       });
-    }));
-  vscode.commands.registerCommand(
-    'neocmakelsp.outline.runConfigureDebugger',
-    (what: SourceFileNode) => {
-      return vscode.commands.executeCommand('neocmakelsp.runConfigureDebugger', what.sourcePath);
-    }
+    })
+  );
+
+  subscriptions.push(
+    vscode.commands.registerCommand('neocmakelsp.outline.runConfigureDebugger', () => {
+      return vscode.commands.executeCommand('neocmakelsp.runConfigureDebugger');
+    })
   );
 }
 
@@ -64,9 +84,7 @@ export class NeocmakeContext implements vscode.Disposable {
   readonly onDidFinish: vscode.Event<void> = this._onDidFinish.event;
   static async create(context: ExtensionContext): Promise<NeocmakeContext> {
     const subscriptions: vscode.Disposable[] = [];
-    if (get<boolean>('debug')) {
-      setupDebug(subscriptions);
-    }
+    setupDebug(subscriptions);
 
     let neocmakelspExecutable = undefined;
 

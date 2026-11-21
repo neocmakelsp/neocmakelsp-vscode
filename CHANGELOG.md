@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- The debugger type is now `neocmakelsp-cmake` so neocmakelsp can coexist with CMake Tools (#52); update `launch.json` configurations that used the old `cmake` type for this extension
+
+### Fixed
+
+- Show neocmakelsp debug commands when `neocmakelsp.debug` is enabled
+
 ## [0.1.2] - 2026-08-05
 
 ### Changed
