@@ -1,4 +1,4 @@
-name: Publish
+name: Check and Publish
 
 on:
   push:
@@ -27,6 +27,7 @@ jobs:
           runtime: node@22
           cache: true
       - run: corepack pnpm install
+      - run: corepack pnpm build
       - run: corepack pnpm fmt:check
       - run: corepack pnpm test
 
