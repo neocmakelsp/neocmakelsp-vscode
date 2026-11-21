@@ -195,7 +195,8 @@
         {
           "id": "neocmakelsp.cmakeTargets",
           "name": "CMake Targets",
-          "when": "neocmakelsp.cmakeTargets.Support"
+          "when": "neocmakelsp.cmakeTargets.Support",
+          "icon": "$(list-tree)"
         }
       ]
     },
