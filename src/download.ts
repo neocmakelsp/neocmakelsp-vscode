@@ -62,7 +62,7 @@ export async function install(
   assert_info: Github.AssetInfo,
   abort: AbortController,
   storagePath: string
-): Promise<string> {
+): Promise<string | undefined> {
   if (await promisify(fs.exists)(storagePath)) {
     const neocmakeExecutableName = assert_info.runtime;
     const exePath = path.join(storagePath, neocmakeExecutableName);
@@ -73,14 +73,14 @@ export async function install(
   const assert = assert_info.asset;
   const downloadPath = path.join(storagePath, assert.name);
   const neocmakelspPath = path.join(storagePath, assert_info.runtime);
-  await vscode.window.withProgress(
-    {
-      location: vscode.ProgressLocation.Notification,
-      title: 'Downloading new neocmakelsp',
-      cancellable: true,
-    },
-    async (progress, token) => {
-      try {
+  try {
+    await vscode.window.withProgress(
+      {
+        location: vscode.ProgressLocation.Notification,
+        title: 'Downloading new neocmakelsp',
+        cancellable: true,
+      },
+      async (progress, token) => {
         await download(
           progress,
           token,
@@ -91,11 +91,13 @@ export async function install(
           assert_info.runtime,
           abort
         );
-      } finally {
-        await fs.promises.rm(downloadPath, { force: true }).catch(() => undefined);
       }
-    }
-  );
+    );
+  } catch (_) {
+    return undefined;
+  } finally {
+    await fs.promises.rm(downloadPath, { force: true }).catch(() => undefined);
+  }
 
   await fs.promises.chmod(neocmakelspPath, 0o755);
   return neocmakelspPath;
