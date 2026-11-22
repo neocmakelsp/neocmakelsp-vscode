@@ -108,9 +108,12 @@ export class NeocmakeContext implements vscode.Disposable {
         const exPath = context.extensionPath;
 
         const path = await installLatestNeocmakeLsp(exPath);
-        if (path !== undefined) {
-          realPath = path;
+        if (path === undefined) {
+          throw new Error(
+            'Failed to install neocmakelsp. Set "neocmakelsp.localtarget": true and "neocmakelsp.path" to a local neocmakelsp executable.'
+          );
         }
+        realPath = path;
       }
       // The server is implemented in node
       // If the extension is launched in debug mode then the debug server options are used

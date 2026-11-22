@@ -1,11 +1,10 @@
 import * as vscode from 'vscode';
 import * as fs from 'node:fs';
 import * as stream from 'node:stream';
-import * as unzipper from 'unzipper';
 
 import path from 'node:path';
 import { promisify } from 'node:util';
-import * as tar from 'tar';
+import { extractArchive } from './archive';
 import * as Github from './github';
 
 type DownloadProgress = vscode.Progress<{ message?: string; increment?: number }>;
@@ -17,7 +16,7 @@ async function download(
   storagePath: string,
   untarFile: string,
   file_type: Github.FILE_TYPE,
-  targetFile: string,
+  runtime: Github.RUNTIME_NAME,
   abort: AbortController
 ) {
   token.onCancellationRequested(() => abort.abort());
@@ -56,24 +55,7 @@ async function download(
     fs.unlink(untarFile, _ => null);
     throw e;
   });
-  if (file_type === 'tar') {
-    await tar.x({ file: untarFile, C: storagePath });
-  } else {
-    const directory = await unzipper.Open.file(untarFile);
-    if (directory.files.length === 0) {
-      throw new Error('No file');
-    }
-    directory.files[0]
-      .stream()
-      .pipe(fs.createWriteStream(targetFile))
-      .on('error', e => {
-        fs.unlink(untarFile, _ => null);
-        throw e;
-      })
-      .on('finish', () => {
-        fs.unlink(untarFile, _ => null);
-      });
-  }
+  await extractArchive(untarFile, storagePath, file_type, runtime);
 }
 
 export async function install(
@@ -106,16 +88,17 @@ export async function install(
           storagePath,
           downloadPath,
           assert_info.type,
-          neocmakelspPath,
+          assert_info.runtime,
           abort
         );
       }
     );
   } catch (_) {
     return undefined;
+  } finally {
+    await fs.promises.rm(downloadPath, { force: true }).catch(() => undefined);
   }
 
   await fs.promises.chmod(neocmakelspPath, 0o755);
-  await fs.promises.rm(downloadPath);
   return neocmakelspPath;
 }
